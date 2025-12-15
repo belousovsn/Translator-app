@@ -11,8 +11,11 @@ interface Word {
     translation_id: string | null;
 }
 
+let currentWord : Word | null = null
+
 //set the word from the input
 function setWord(value: string, language: Language) : Word {
+    value = value.trim()
     return {
         id: crypto.randomUUID(),
         value,
@@ -25,5 +28,6 @@ const input = document.querySelector('#searchInput') as HTMLInputElement;
 const button = document.querySelector('#searchBtn');
 
 button?.addEventListener('click', () => {
-    console.log(setWord(input.value.trim(), "en"));
+    currentWord = setWord(input.value, "en");
+    console.log(currentWord)
 });
