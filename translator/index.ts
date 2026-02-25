@@ -24,10 +24,18 @@ function setWord(value: string, language: Language) : Word {
     }
 }
 
+function translateWord (word: Word, sourceLang: Language, resultLang: Language) : Word | null
+ {
+    return word
+}
+
 const input = document.querySelector('#searchInput') as HTMLInputElement;
 const button = document.querySelector('#searchBtn');
 
 button?.addEventListener('click', () => {
     currentWord = setWord(input.value, "en");
     console.log(currentWord)
+// tbd add lang check
+    currentWord = translateWord(currentWord, "hy", "en")
+
 });

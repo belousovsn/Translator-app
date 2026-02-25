@@ -47,34 +47,76 @@ type Deck = {
     numberOfAllowedDuplicates : number;
 }
 
-//pick random card from the card shop
-function pickRandomCard(source: string[]) {
+function selectRandomCard(source: string[]) {
     let randomIndex : number = Math.floor(Math.random() * source.length)
     return source[randomIndex]
 }
 //validate no more than certain amount of same cards in the deck
 function isWithinCountLimit (sourceArray: string [], value: string, limitCount: number): boolean {
-    let matchesCount : number = sourceArray.reduce((acc: number, curr: string) => acc + (curr === value ? 1 : 0), 0)
+    let matchesCount : number = sourceArray.reduce(function (acc: number, curr: string) {
+      return acc + (curr === value ? 1 : 0);
+    },
+    0)
     return matchesCount >= limitCount ? false : true
 }
 
-//making a deck of cards from the shop
-function makeDeck(size: number, source: string[]): Deck {
+function makeNewDeck(size: number, source: string[]): Deck {
     let deck : Deck = {
         cards: [], 
         size: size,
         numberOfAllowedDuplicates: 2
     };
     while (deck.cards.length < size) {
-        let pickedCard : string = pickRandomCard(source)
-        if (isWithinCountLimit(deck.cards, pickedCard, deck.numberOfAllowedDuplicates)) {
-            deck.cards.push(pickedCard)
+        let selectedCard : string = selectRandomCard(source)
+        if (isWithinCountLimit(
+            deck.cards, 
+            selectedCard, 
+            deck.numberOfAllowedDuplicates)) 
+        {
+            deck.cards.push(selectedCard)
         }
     }
     return deck
 }
 
-console.log(makeDeck(10, cardsShop))
-//function to shuffle the deck
-//function to pick a card from the deck
+function shuffleDeck(deck: Deck): Deck {
+    const shuffledCards = [...deck.cards];
+    //fisher-yates algorithm to randomize an array
+    for (let i = shuffledCards.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [shuffledCards[i], shuffledCards[randomIndex]] = [shuffledCards[randomIndex], shuffledCards[i]];
+    }
+    
+    return {
+        ...deck,
+        cards: shuffledCards
+    };
+}
+
+const sampleDeck : Deck = makeNewDeck(10, cardsShop)
+
+console.log("\n Initial deck \n")
+console.log(sampleDeck)
+
+
+function pickCards(deck: Deck, number: number) : string[] {
+    
+    let chosenCards : string[] = []
+    for (let i = 0; i < number; i++) {
+        let randomIndex : number = Math.floor(deck.size * Math.random())
+        chosenCards[i] = deck.cards[randomIndex]
+        //removing selected card from the deck
+        deck.cards.splice(randomIndex, 1)
+    }
+    return chosenCards
+}
+
+
+console.log("\n Initial deck \n")
+console.log(sampleDeck)
+console.log("\n Picking random cards from the deck\n")
+console.log(pickCards(sampleDeck, 2))
+console.log("\n Checking deck afterwards \n")
+console.log(sampleDeck)
+
 //function to check the chance of picking two cards of the same value one after another
