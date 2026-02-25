@@ -43,7 +43,7 @@ const cardsShop : string[] = [
 
 type Deck = {
     cards : string [];
-    size : number;
+    maxSize : number;
     numberOfAllowedDuplicates : number;
 }
 
@@ -63,7 +63,7 @@ function isWithinCountLimit (sourceArray: string [], value: string, limitCount: 
 function makeNewDeck(size: number, source: string[]): Deck {
     let deck : Deck = {
         cards: [], 
-        size: size,
+        maxSize: size,
         numberOfAllowedDuplicates: 2
     };
     while (deck.cards.length < size) {
@@ -93,17 +93,13 @@ function shuffleDeck(deck: Deck): Deck {
     };
 }
 
-const sampleDeck : Deck = makeNewDeck(10, cardsShop)
-
-console.log("\n Initial deck \n")
-console.log(sampleDeck)
 
 
 function pickCards(deck: Deck, number: number) : string[] {
     
     let chosenCards : string[] = []
     for (let i = 0; i < number; i++) {
-        let randomIndex : number = Math.floor(deck.size * Math.random())
+        let randomIndex : number = Math.floor(deck.maxSize * Math.random())
         chosenCards[i] = deck.cards[randomIndex]
         //removing selected card from the deck
         deck.cards.splice(randomIndex, 1)
@@ -111,12 +107,31 @@ function pickCards(deck: Deck, number: number) : string[] {
     return chosenCards
 }
 
+function checkProbability (deck: Deck, numberOfIterations: number) : number {
+    let result : number = 0
+    for (let i = 0; i < numberOfIterations; i++) {
+        let selectedCards : string [] = []
+        let areSelectedCardsEqual : boolean = true
+        for (let j = 0; j < deck.numberOfAllowedDuplicates; j++) {
+            selectedCards[j] = selectRandomCard(deck.cards)
+            if (j > 0 && selectedCards[j] !== selectedCards[0]) {
+                areSelectedCardsEqual = false
+                break
+            }
+        }
+        if (areSelectedCardsEqual) result ++;
 
+    }
+    return 100 * result / numberOfIterations
+}
+
+const sampleDeck : Deck = makeNewDeck(35, cardsShop)
 console.log("\n Initial deck \n")
 console.log(sampleDeck)
-console.log("\n Picking random cards from the deck\n")
-console.log(pickCards(sampleDeck, 2))
-console.log("\n Checking deck afterwards \n")
-console.log(sampleDeck)
 
-//function to check the chance of picking two cards of the same value one after another
+//console.log("\n Picking random cards from the deck\n")
+//console.log(pickCards(sampleDeck, 2))
+//console.log("\n Checking deck afterwards \n")
+//console.log(sampleDeck)
+console.log("\n Checking the probability to select same cards in a row \n")
+console.log(checkProbability(sampleDeck,100000))

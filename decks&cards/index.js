@@ -73,7 +73,7 @@ function isWithinCountLimit(sourceArray, value, limitCount) {
 function makeNewDeck(size, source) {
     var deck = {
         cards: [],
-        size: size,
+        maxSize: size,
         numberOfAllowedDuplicates: 2
     };
     while (deck.cards.length < size) {
@@ -94,25 +94,40 @@ function shuffleDeck(deck) {
     }
     return __assign(__assign({}, deck), { cards: shuffledCards });
 }
-var sampleDeck = makeNewDeck(10, cardsShop);
-console.log("\n Initial deck \n");
-console.log(sampleDeck);
 function pickCards(deck, number) {
     var chosenCards = [];
     for (var i = 0; i < number; i++) {
-        var randomIndex = Math.floor(deck.size * Math.random());
+        var randomIndex = Math.floor(deck.maxSize * Math.random());
         chosenCards[i] = deck.cards[randomIndex];
         //removing selected card from the deck
         deck.cards.splice(randomIndex, 1);
     }
     return chosenCards;
 }
+function checkProbability(deck, numberOfIterations) {
+    var result = 0;
+    for (var i = 0; i < numberOfIterations; i++) {
+        var selectedCards = [];
+        var areSelectedCardsEqual = true;
+        for (var j = 0; j < deck.numberOfAllowedDuplicates; j++) {
+            selectedCards[j] = selectRandomCard(deck.cards);
+            if (j > 0 && selectedCards[j] !== selectedCards[0]) {
+                areSelectedCardsEqual = false;
+                break;
+            }
+        }
+        if (areSelectedCardsEqual)
+            result++;
+    }
+    return 100 * result / numberOfIterations;
+}
+var sampleDeck = makeNewDeck(35, cardsShop);
 console.log("\n Initial deck \n");
 console.log(sampleDeck);
-console.log("\n Picking random cards from the deck\n");
-console.log(pickCards(sampleDeck, 2));
-console.log("\n Checking deck afterwards \n");
-console.log(sampleDeck);
-//function to shuffle the deck
-//function to pick a card from the deck
-//function to check the chance of picking two cards of the same value one after another
+//console.log("\n Picking random cards from the deck\n")
+//console.log(pickCards(sampleDeck, 2))
+//console.log("\n Checking deck afterwards \n")
+//console.log(sampleDeck)
+console.log("\n Checking the probability to select same cards in a row \n");
+console.log(checkProbability(sampleDeck, 100000));
+//# sourceMappingURL=index.js.map
