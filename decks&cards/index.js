@@ -60,8 +60,8 @@ var cardsShop = [
     ".32 Colt",
 ];
 function selectRandomCard(source) {
-    var randomIndex = Math.floor(Math.random() * source.length);
-    return source[randomIndex];
+    var r = Math.floor(Math.random() * source.length);
+    return source[r];
 }
 //validate no more than certain amount of same cards in the deck
 function isWithinCountLimit(sourceArray, value, limitCount) {
@@ -74,8 +74,31 @@ function makeNewDeck(size, source) {
     var deck = {
         cards: [],
         maxSize: size,
-        numberOfAllowedDuplicates: 2
+        currentSize: size,
+        numberOfAllowedDuplicates: 2,
+        shuffleDeck: function () {
+            var _a;
+            var shuffledCards = __spreadArray([], this.cards, true);
+            //fisher-yates algorithm to randomize an array
+            for (var i = shuffledCards.length - 1; i > 0; i--) {
+                var r = Math.floor(Math.random() * (i + 1));
+                _a = [shuffledCards[r], shuffledCards[i]], shuffledCards[i] = _a[0], shuffledCards[r] = _a[1];
+            }
+            return __assign(__assign({}, this), { cards: shuffledCards });
+        },
+        pickCards: function (number) {
+            var chosenCards = [];
+            for (var i = 0; i < number; i++) {
+                var r = Math.floor(deck.maxSize * Math.random());
+                chosenCards[i] = this.cards[r];
+                //removing selected card from the deck
+                this.cards.splice(r, 1);
+                this.currentSize--;
+            }
+            return chosenCards;
+        }
     };
+    //filling the deck with cards
     while (deck.cards.length < size) {
         var selectedCard = selectRandomCard(source);
         if (isWithinCountLimit(deck.cards, selectedCard, deck.numberOfAllowedDuplicates)) {
@@ -83,26 +106,6 @@ function makeNewDeck(size, source) {
         }
     }
     return deck;
-}
-function shuffleDeck(deck) {
-    var _a;
-    var shuffledCards = __spreadArray([], deck.cards, true);
-    //fisher-yates algorithm to randomize an array
-    for (var i = shuffledCards.length - 1; i > 0; i--) {
-        var randomIndex = Math.floor(Math.random() * (i + 1));
-        _a = [shuffledCards[randomIndex], shuffledCards[i]], shuffledCards[i] = _a[0], shuffledCards[randomIndex] = _a[1];
-    }
-    return __assign(__assign({}, deck), { cards: shuffledCards });
-}
-function pickCards(deck, number) {
-    var chosenCards = [];
-    for (var i = 0; i < number; i++) {
-        var randomIndex = Math.floor(deck.maxSize * Math.random());
-        chosenCards[i] = deck.cards[randomIndex];
-        //removing selected card from the deck
-        deck.cards.splice(randomIndex, 1);
-    }
-    return chosenCards;
 }
 function checkProbability(deck, numberOfIterations) {
     var result = 0;
@@ -123,6 +126,12 @@ function checkProbability(deck, numberOfIterations) {
 }
 var sampleDeck = makeNewDeck(35, cardsShop);
 console.log("\n Initial deck \n");
+console.log(sampleDeck);
+//console.log("\n Shuffled deck \n")
+//console.log(sampleDeck.shuffleDeck())
+console.log("\n Pick cards from the deck several times\n");
+console.log(sampleDeck.pickCards(2));
+console.log(sampleDeck.pickCards(3));
 console.log(sampleDeck);
 //console.log("\n Picking random cards from the deck\n")
 //console.log(pickCards(sampleDeck, 2))

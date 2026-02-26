@@ -44,12 +44,15 @@ const cardsShop : string[] = [
 type Deck = {
     cards : string [];
     maxSize : number;
+    currentSize: number;
     numberOfAllowedDuplicates : number;
+    shuffleDeck() : Deck;
+    pickCards(number: number) : string[]
 }
 
 function selectRandomCard(source: string[]) {
-    let randomIndex : number = Math.floor(Math.random() * source.length)
-    return source[randomIndex]
+    let r : number = Math.floor(Math.random() * source.length)
+    return source[r]
 }
 //validate no more than certain amount of same cards in the deck
 function isWithinCountLimit (sourceArray: string [], value: string, limitCount: number): boolean {
@@ -64,8 +67,33 @@ function makeNewDeck(size: number, source: string[]): Deck {
     let deck : Deck = {
         cards: [], 
         maxSize: size,
-        numberOfAllowedDuplicates: 2
+        currentSize: size,
+        numberOfAllowedDuplicates: 2,
+        shuffleDeck() {
+            const shuffledCards = [...this.cards];
+            //fisher-yates algorithm to randomize an array
+                for (let i = shuffledCards.length - 1; i > 0; i--) {
+                    const r = Math.floor(Math.random() * (i + 1));
+                    [shuffledCards[i], shuffledCards[r]] = [shuffledCards[r], shuffledCards[i]];
+                }
+            return {
+            ...this,
+            cards: shuffledCards
+            };
+        },
+        pickCards(number : number) : string[] {
+            let chosenCards : string[] = []
+            for (let i = 0; i < number; i++) {
+                let r : number = Math.floor(deck.maxSize * Math.random())
+                chosenCards[i] = this.cards[r]
+                //removing selected card from the deck
+                this.cards.splice(r, 1)
+                this.currentSize--
+            }
+            return chosenCards
+        }
     };
+    //filling the deck with cards
     while (deck.cards.length < size) {
         let selectedCard : string = selectRandomCard(source)
         if (isWithinCountLimit(
@@ -79,33 +107,6 @@ function makeNewDeck(size: number, source: string[]): Deck {
     return deck
 }
 
-function shuffleDeck(deck: Deck): Deck {
-    const shuffledCards = [...deck.cards];
-    //fisher-yates algorithm to randomize an array
-    for (let i = shuffledCards.length - 1; i > 0; i--) {
-        const randomIndex = Math.floor(Math.random() * (i + 1));
-        [shuffledCards[i], shuffledCards[randomIndex]] = [shuffledCards[randomIndex], shuffledCards[i]];
-    }
-    
-    return {
-        ...deck,
-        cards: shuffledCards
-    };
-}
-
-
-
-function pickCards(deck: Deck, number: number) : string[] {
-    
-    let chosenCards : string[] = []
-    for (let i = 0; i < number; i++) {
-        let randomIndex : number = Math.floor(deck.maxSize * Math.random())
-        chosenCards[i] = deck.cards[randomIndex]
-        //removing selected card from the deck
-        deck.cards.splice(randomIndex, 1)
-    }
-    return chosenCards
-}
 
 function checkProbability (deck: Deck, numberOfIterations: number) : number {
     let result : number = 0
@@ -127,6 +128,14 @@ function checkProbability (deck: Deck, numberOfIterations: number) : number {
 
 const sampleDeck : Deck = makeNewDeck(35, cardsShop)
 console.log("\n Initial deck \n")
+console.log(sampleDeck)
+
+//console.log("\n Shuffled deck \n")
+//console.log(sampleDeck.shuffleDeck())
+
+console.log("\n Pick cards from the deck several times\n")
+console.log(sampleDeck.pickCards(2))
+console.log(sampleDeck.pickCards(3))
 console.log(sampleDeck)
 
 //console.log("\n Picking random cards from the deck\n")
