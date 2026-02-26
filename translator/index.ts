@@ -1,3 +1,6 @@
+// MyMemory Translation API
+const apiUrl = "https://api.mymemory.translated.net/get";
+
 type Language = 
     | "ru"
     | "en"
@@ -24,18 +27,42 @@ function setWord(value: string, language: Language) : Word {
     }
 }
 
-function translateWord (word: Word, sourceLang: Language, resultLang: Language) : Word | null
- {
-    return word
+async function translateWord (word: Word, sourceLang: Language, resultLang: Language) : Promise<Word | null>
+ {  
+    try {
+        const langPair = `${sourceLang}|${resultLang}`;
+        const url = `${apiUrl}?q=${encodeURIComponent(word.value)}&langpair=${langPair}`;
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`API error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.responseStatus === 200) {
+            word.value = data.responseData.translatedText;
+            word.language = resultLang;
+            word.translation_id = crypto.randomUUID();
+            return word;
+        } else {
+            throw new Error("Translation failed");
+        }
+    } catch (error) {
+        console.error("Translation failed:", error);
+        return null;
+    }
 }
 
 const input = document.querySelector('#searchInput') as HTMLInputElement;
 const button = document.querySelector('#searchBtn');
 
-button?.addEventListener('click', () => {
+button?.addEventListener('click', async () => {
     currentWord = setWord(input.value, "en");
     console.log(currentWord)
 // tbd add lang check
-    currentWord = translateWord(currentWord, "hy", "en")
+    currentWord = await translateWord(currentWord, "en", "hy")
+    console.log(currentWord)
 
 });
