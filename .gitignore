@@ -1,2 +1,4 @@
 .env
 ./assets
+decks&cards/default cards.json
+.gitignore
