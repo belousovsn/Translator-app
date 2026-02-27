@@ -11,27 +11,39 @@ interface Word {
     id: string;
     value: string;
     language: Language | null;
-    translation_id: string | null;
+}
+
+interface Translation {
+    id : string
+    sourceWord : Word
+    translatedWord : Word
 }
 
 let currentWord : Word | null = null
+let translationList : Translation [] = []
 
-//set the word from the input
-function setWord(value: string, language: Language) : Word {
+function makeNewWord(value: string, language: Language) : Word {
     value = value.trim()
     return {
         id: crypto.randomUUID(),
         value,
-        language,
-        translation_id: null
+        language
     }
 }
 
-async function translateWord (word: Word, sourceLang: Language, resultLang: Language) : Promise<Word | null>
+function makeNewTranslation (sourceWord : Word, translatedWord : Word) : Translation {
+    return {
+        id: crypto.randomUUID(),
+        sourceWord: sourceWord,
+        translatedWord: translatedWord
+    }
+}
+
+async function translateWord (sourceWord: Word, sourceLang: Language, resultLang: Language) : Promise<Word | null>
  {  
     try {
         const langPair = `${sourceLang}|${resultLang}`;
-        const url = `${apiUrl}?q=${encodeURIComponent(word.value)}&langpair=${langPair}`;
+        const url = `${apiUrl}?q=${encodeURIComponent(sourceWord.value)}&langpair=${langPair}`;
         
         const response = await fetch(url);
         
@@ -42,10 +54,9 @@ async function translateWord (word: Word, sourceLang: Language, resultLang: Lang
         const data = await response.json();
         
         if (data.responseStatus === 200) {
-            word.value = data.responseData.translatedText;
-            word.language = resultLang;
-            word.translation_id = crypto.randomUUID();
-            return word;
+            let translatedWord = makeNewWord(data.responseData.translatedText, resultLang);
+            translationList.push(makeNewTranslation(sourceWord, translatedWord))
+            return translatedWord;
         } else {
             throw new Error("Translation failed");
         }
@@ -59,10 +70,11 @@ const input = document.querySelector('#searchInput') as HTMLInputElement;
 const button = document.querySelector('#searchBtn');
 
 button?.addEventListener('click', async () => {
-    currentWord = setWord(input.value, "en");
+    currentWord = makeNewWord(input.value, "en");
     console.log(currentWord)
 // tbd add lang check
-    currentWord = await translateWord(currentWord, "en", "hy")
-    console.log(currentWord)
+    let translatedWord = await translateWord(currentWord, "en", "hy")
+    console.log(translatedWord)
+    console.log(translationList)
 
 });

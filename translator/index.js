@@ -38,25 +38,31 @@ var _this = this;
 // MyMemory Translation API
 var apiUrl = "https://api.mymemory.translated.net/get";
 var currentWord = null;
-//set the word from the input
-function setWord(value, language) {
+var translationList = [];
+function makeNewWord(value, language) {
     value = value.trim();
     return {
         id: crypto.randomUUID(),
         value: value,
-        language: language,
-        translation_id: null
+        language: language
     };
 }
-function translateWord(word, sourceLang, resultLang) {
+function makeNewTranslation(sourceWord, translatedWord) {
+    return {
+        id: crypto.randomUUID(),
+        sourceWord: sourceWord,
+        translatedWord: translatedWord
+    };
+}
+function translateWord(sourceWord, sourceLang, resultLang) {
     return __awaiter(this, void 0, void 0, function () {
-        var langPair, url, response, data, error_1;
+        var langPair, url, response, data, translatedWord, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
                     langPair = "".concat(sourceLang, "|").concat(resultLang);
-                    url = "".concat(apiUrl, "?q=").concat(encodeURIComponent(word.value), "&langpair=").concat(langPair);
+                    url = "".concat(apiUrl, "?q=").concat(encodeURIComponent(sourceWord.value), "&langpair=").concat(langPair);
                     return [4 /*yield*/, fetch(url)];
                 case 1:
                     response = _a.sent();
@@ -67,10 +73,9 @@ function translateWord(word, sourceLang, resultLang) {
                 case 2:
                     data = _a.sent();
                     if (data.responseStatus === 200) {
-                        word.value = data.responseData.translatedText;
-                        word.language = resultLang;
-                        word.translation_id = crypto.randomUUID();
-                        return [2 /*return*/, word];
+                        translatedWord = makeNewWord(data.responseData.translatedText, resultLang);
+                        translationList.push(makeNewTranslation(sourceWord, translatedWord));
+                        return [2 /*return*/, translatedWord];
                     }
                     else {
                         throw new Error("Translation failed");
@@ -88,16 +93,17 @@ function translateWord(word, sourceLang, resultLang) {
 var input = document.querySelector('#searchInput');
 var button = document.querySelector('#searchBtn');
 button === null || button === void 0 ? void 0 : button.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
+    var translatedWord;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                currentWord = setWord(input.value, "en");
+                currentWord = makeNewWord(input.value, "en");
                 console.log(currentWord);
                 return [4 /*yield*/, translateWord(currentWord, "en", "hy")];
             case 1:
-                // tbd add lang check
-                currentWord = _a.sent();
-                console.log(currentWord);
+                translatedWord = _a.sent();
+                console.log(translatedWord);
+                console.log(translationList);
                 return [2 /*return*/];
         }
     });
