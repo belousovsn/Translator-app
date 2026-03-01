@@ -103,9 +103,9 @@ searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEven
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                currentWord = makeNewWord(input.value, "en");
+                currentWord = makeNewWord(input.value, "hy");
                 console.log(currentWord);
-                return [4 /*yield*/, translateWord(currentWord, "en", "hy")];
+                return [4 /*yield*/, translateWord(currentWord, "hy", "en")];
             case 1:
                 translatedWord = _a.sent();
                 console.log(translatedWord);

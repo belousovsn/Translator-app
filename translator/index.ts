@@ -76,10 +76,10 @@ const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElem
 const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
 
 searchButton?.addEventListener('click', async () => {
-    currentWord = makeNewWord(input.value, "en");
+    currentWord = makeNewWord(input.value, "hy");
     console.log(currentWord)
 // tbd add lang check
-    let translatedWord = await translateWord(currentWord, "en", "hy")
+    let translatedWord = await translateWord(currentWord, "hy", "en")
     console.log(translatedWord)
     console.log(translationList)
     
