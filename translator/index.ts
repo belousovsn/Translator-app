@@ -1,6 +1,9 @@
 // MyMemory Translation API
 const apiUrl = "https://api.mymemory.translated.net/get";
 
+const armenianPattern = /[\u0531-\u0587\u0589-\u058A]/; // Armenian Unicode range
+const russianPattern = /[\u0400-\u04FF]/;              // Cyrillic Unicode range
+
 type Language = 
     | "ru"
     | "en"
@@ -37,6 +40,16 @@ function makeNewTranslation (sourceWord : Word, translatedWord : Word) : Transla
         sourceWord: sourceWord,
         translatedWord: translatedWord
     }
+}
+
+function determineInputLanguage (inputText : string) : Language {
+    if (armenianPattern.test(inputText)) {
+        return 'hy';
+    }
+    else if (russianPattern.test(inputText)) {
+        return 'ru';
+    }
+    else return 'en'
 }
 
 async function translateWord (sourceWord: Word, sourceLang: Language, resultLang: Language) : Promise<Word | null>
@@ -76,10 +89,17 @@ const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElem
 const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
 
 searchButton?.addEventListener('click', async () => {
-    currentWord = makeNewWord(input.value, "hy");
+    let detectedLang : Language = 'hy'
+    try {
+        detectedLang = determineInputLanguage(input.value);
+    } catch (error) {
+        console.log('Cannot recognize the language!')
+    }
+    const targetLang = detectedLang === 'en' ? 'hy' : 'en'
+    currentWord = makeNewWord(input.value, detectedLang);
     console.log(currentWord)
 // tbd add lang check
-    let translatedWord = await translateWord(currentWord, "hy", "en")
+    let translatedWord = await translateWord(currentWord, detectedLang, targetLang)
     console.log(translatedWord)
     console.log(translationList)
     

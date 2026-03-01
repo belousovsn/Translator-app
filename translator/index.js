@@ -37,6 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 // MyMemory Translation API
 var apiUrl = "https://api.mymemory.translated.net/get";
+var armenianPattern = /[\u0531-\u0587\u0589-\u058A]/; // Armenian Unicode range
+var russianPattern = /[\u0400-\u04FF]/; // Cyrillic Unicode range
 var currentWord = null;
 var translationList = [];
 function makeNewWord(value, language) {
@@ -53,6 +55,16 @@ function makeNewTranslation(sourceWord, translatedWord) {
         sourceWord: sourceWord,
         translatedWord: translatedWord
     };
+}
+function determineInputLanguage(inputText) {
+    if (armenianPattern.test(inputText)) {
+        return 'hy';
+    }
+    else if (russianPattern.test(inputText)) {
+        return 'ru';
+    }
+    else
+        return 'en';
 }
 function translateWord(sourceWord, sourceLang, resultLang) {
     return __awaiter(this, void 0, void 0, function () {
@@ -99,13 +111,21 @@ var isShiftActive = shiftButton.classList.contains('active');
 var sourceWordDisplay = document.querySelector('.source-word');
 var translatedWordDisplay = document.querySelector('.translated-word');
 searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
-    var translatedWord;
+    var detectedLang, targetLang, translatedWord;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                currentWord = makeNewWord(input.value, "hy");
+                detectedLang = 'hy';
+                try {
+                    detectedLang = determineInputLanguage(input.value);
+                }
+                catch (error) {
+                    console.log('Cannot recognize the language!');
+                }
+                targetLang = detectedLang === 'en' ? 'hy' : 'en';
+                currentWord = makeNewWord(input.value, detectedLang);
                 console.log(currentWord);
-                return [4 /*yield*/, translateWord(currentWord, "hy", "en")];
+                return [4 /*yield*/, translateWord(currentWord, detectedLang, targetLang)];
             case 1:
                 translatedWord = _a.sent();
                 console.log(translatedWord);
