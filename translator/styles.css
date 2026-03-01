@@ -197,6 +197,16 @@ body {
   font-weight: 500;
 }
 
+.source-word,
+.translated-word {
+  display: block;
+  font-size: clamp(1.5rem, calc(3rem - 0.05em * 20), 3rem);
+  font-weight: bold;
+  margin-top: 8px;
+  word-break: break-word;
+  color: #1a73e8;
+}
+
 /* Images list */
 .image-list {
   list-style: none;
