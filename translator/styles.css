@@ -113,10 +113,26 @@ body {
   background: #fff;
   color: #202124;
   font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.key:hover {
+  background: #f1f3f4;
+}
+
+.key:active {
+  background: #e8eaed;
 }
 
 .key.wide {
   min-width: 200px;
+}
+
+.shift-key.active {
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
 }
 
 /* Generic panel styling */
