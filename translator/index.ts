@@ -68,6 +68,8 @@ async function translateWord (sourceWord: Word, sourceLang: Language, resultLang
 
 const input = document.querySelector('#searchInput') as HTMLInputElement;
 const button = document.querySelector('#searchBtn');
+const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElement;
+const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
 
 button?.addEventListener('click', async () => {
     currentWord = makeNewWord(input.value, "en");
@@ -76,5 +78,10 @@ button?.addEventListener('click', async () => {
     let translatedWord = await translateWord(currentWord, "en", "hy")
     console.log(translatedWord)
     console.log(translationList)
+    
+    if (translatedWord) {
+        sourceWordDisplay.textContent = currentWord.value;
+        translatedWordDisplay.textContent = translatedWord.value;
+    }
 
 });

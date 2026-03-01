@@ -92,6 +92,8 @@ function translateWord(sourceWord, sourceLang, resultLang) {
 }
 var input = document.querySelector('#searchInput');
 var button = document.querySelector('#searchBtn');
+var sourceWordDisplay = document.querySelector('.source-word');
+var translatedWordDisplay = document.querySelector('.translated-word');
 button === null || button === void 0 ? void 0 : button.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
     var translatedWord;
     return __generator(this, function (_a) {
@@ -104,6 +106,10 @@ button === null || button === void 0 ? void 0 : button.addEventListener('click',
                 translatedWord = _a.sent();
                 console.log(translatedWord);
                 console.log(translationList);
+                if (translatedWord) {
+                    sourceWordDisplay.textContent = currentWord.value;
+                    translatedWordDisplay.textContent = translatedWord.value;
+                }
                 return [2 /*return*/];
         }
     });
