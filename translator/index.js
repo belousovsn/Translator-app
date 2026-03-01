@@ -93,6 +93,7 @@ function translateWord(sourceWord, sourceLang, resultLang) {
 var input = document.querySelector('#searchInput');
 var searchButton = document.querySelector('#searchBtn');
 var shiftButton = document.querySelector('.shift-key');
+var spaceButton = document.querySelector('.space-key');
 var allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
 var isShiftActive = shiftButton.classList.contains('active');
 var sourceWordDisplay = document.querySelector('.source-word');
@@ -132,5 +133,13 @@ shiftButton === null || shiftButton === void 0 ? void 0 : shiftButton.addEventLi
             key.textContent = key.textContent.toLowerCase();
         });
     }
+});
+allKeys.forEach(function (key) {
+    key === null || key === void 0 ? void 0 : key.addEventListener('click', function () {
+        input.value += key.textContent;
+    });
+});
+spaceButton === null || spaceButton === void 0 ? void 0 : spaceButton.addEventListener('click', function () {
+    input.value += ' ';
 });
 //# sourceMappingURL=index.js.map

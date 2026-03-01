@@ -69,6 +69,7 @@ async function translateWord (sourceWord: Word, sourceLang: Language, resultLang
 const input = document.querySelector('#searchInput') as HTMLInputElement;
 const searchButton = document.querySelector('#searchBtn');
 const shiftButton = document.querySelector('.shift-key') as HTMLButtonElement;
+const spaceButton = document.querySelector('.space-key') as HTMLButtonElement;
 const allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
 let isShiftActive = shiftButton.classList.contains('active') as boolean;
 const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElement;
@@ -106,3 +107,11 @@ shiftButton?.addEventListener('click', () => {
     }
     }
 )
+allKeys.forEach(key => {
+    key?.addEventListener('click', () => {
+    input.value += key.textContent
+})})
+
+spaceButton?.addEventListener('click', () => {
+    input.value += ' '
+})
