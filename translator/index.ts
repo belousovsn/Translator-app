@@ -67,11 +67,14 @@ async function translateWord (sourceWord: Word, sourceLang: Language, resultLang
 }
 
 const input = document.querySelector('#searchInput') as HTMLInputElement;
-const button = document.querySelector('#searchBtn');
+const searchButton = document.querySelector('#searchBtn');
+const shiftButton = document.querySelector('.shift-key') as HTMLButtonElement;
+const allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
+let isShiftActive = shiftButton.classList.contains('active') as boolean;
 const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElement;
 const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
 
-button?.addEventListener('click', async () => {
+searchButton?.addEventListener('click', async () => {
     currentWord = makeNewWord(input.value, "en");
     console.log(currentWord)
 // tbd add lang check
@@ -85,3 +88,21 @@ button?.addEventListener('click', async () => {
     }
 
 });
+
+shiftButton?.addEventListener('click', () => {
+    console.log('the shift button is pressed')
+    isShiftActive = !isShiftActive;
+
+    if (isShiftActive) {
+        shiftButton.classList.add('active');
+        allKeys.forEach(key => {
+            key.textContent = key.textContent.toUpperCase()
+        })}
+    else {
+        shiftButton.classList.remove('active');
+        allKeys.forEach(key => {
+            key.textContent = key.textContent.toLowerCase()
+        })
+    }
+    }
+)

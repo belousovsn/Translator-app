@@ -91,10 +91,13 @@ function translateWord(sourceWord, sourceLang, resultLang) {
     });
 }
 var input = document.querySelector('#searchInput');
-var button = document.querySelector('#searchBtn');
+var searchButton = document.querySelector('#searchBtn');
+var shiftButton = document.querySelector('.shift-key');
+var allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
+var isShiftActive = shiftButton.classList.contains('active');
 var sourceWordDisplay = document.querySelector('.source-word');
 var translatedWordDisplay = document.querySelector('.translated-word');
-button === null || button === void 0 ? void 0 : button.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
+searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
     var translatedWord;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -114,4 +117,20 @@ button === null || button === void 0 ? void 0 : button.addEventListener('click',
         }
     });
 }); });
+shiftButton === null || shiftButton === void 0 ? void 0 : shiftButton.addEventListener('click', function () {
+    console.log('the shift button is pressed');
+    isShiftActive = !isShiftActive;
+    if (isShiftActive) {
+        shiftButton.classList.add('active');
+        allKeys.forEach(function (key) {
+            key.textContent = key.textContent.toUpperCase();
+        });
+    }
+    else {
+        shiftButton.classList.remove('active');
+        allKeys.forEach(function (key) {
+            key.textContent = key.textContent.toLowerCase();
+        });
+    }
+});
 //# sourceMappingURL=index.js.map
