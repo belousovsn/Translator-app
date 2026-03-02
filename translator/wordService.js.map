@@ -1,0 +1,1 @@
+{"version":3,"file":"wordService.js","sourceRoot":"","sources":["wordService.ts"],"names":[],"mappings":"AAEA,MAAM,UAAU,WAAW,CAAC,KAAa,EAAE,QAAkB;IACzD,KAAK,GAAG,KAAK,CAAC,IAAI,EAAE,CAAA;IACpB,OAAO;QACH,EAAE,EAAE,MAAM,CAAC,UAAU,EAAE;QACvB,KAAK,OAAA;QACL,QAAQ,UAAA;KACX,CAAA;AACL,CAAC"}

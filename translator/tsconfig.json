@@ -1,9 +1,14 @@
 {
     "compilerOptions": {
         "sourceMap": true,
-        "lib": ["ES2015", "DOM"]
+        "lib": ["ES2015", "DOM"],
+        "module": "ES2015",        
+        "moduleResolution": "bundler" 
     },
     "files": [
-        "index.ts"
+        "index.ts",
+        "translationService.ts",
+        "wordService.ts",
+        "types.ts"
     ]
 }

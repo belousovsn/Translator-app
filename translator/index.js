@@ -34,74 +34,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
-// MyMemory Translation API
-var apiUrl = "https://api.mymemory.translated.net/get";
-var armenianPattern = /[\u0531-\u0587\u0589-\u058A]/; // Armenian Unicode range
-var russianPattern = /[\u0400-\u04FF]/; // Cyrillic Unicode range
-var currentWord = null;
-var translationList = [];
-function makeNewWord(value, language) {
-    value = value.trim();
-    return {
-        id: crypto.randomUUID(),
-        value: value,
-        language: language
-    };
-}
-function makeNewTranslation(sourceWord, translatedWord) {
-    return {
-        id: crypto.randomUUID(),
-        sourceWord: sourceWord,
-        translatedWord: translatedWord
-    };
-}
-function determineInputLanguage(inputText) {
-    if (armenianPattern.test(inputText)) {
-        return 'hy';
-    }
-    else if (russianPattern.test(inputText)) {
-        return 'ru';
-    }
-    else
-        return 'en';
-}
-function translateWord(sourceWord, sourceLang, resultLang) {
-    return __awaiter(this, void 0, void 0, function () {
-        var langPair, url, response, data, translatedWord, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 3, , 4]);
-                    langPair = "".concat(sourceLang, "|").concat(resultLang);
-                    url = "".concat(apiUrl, "?q=").concat(encodeURIComponent(sourceWord.value), "&langpair=").concat(langPair);
-                    return [4 /*yield*/, fetch(url)];
-                case 1:
-                    response = _a.sent();
-                    if (!response.ok) {
-                        throw new Error("API error: ".concat(response.statusText));
-                    }
-                    return [4 /*yield*/, response.json()];
-                case 2:
-                    data = _a.sent();
-                    if (data.responseStatus === 200) {
-                        translatedWord = makeNewWord(data.responseData.translatedText, resultLang);
-                        translationList.push(makeNewTranslation(sourceWord, translatedWord));
-                        return [2 /*return*/, translatedWord];
-                    }
-                    else {
-                        throw new Error("Translation failed");
-                    }
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _a.sent();
-                    console.error("Translation failed:", error_1);
-                    return [2 /*return*/, null];
-                case 4: return [2 /*return*/];
-            }
-        });
-    });
-}
+import { makeNewWord } from "./wordService.js";
+import { determineInputLanguage, makeNewTranslation, translateWordAPI } from "./translationService.js";
 var input = document.querySelector('#searchInput');
 var searchButton = document.querySelector('#searchBtn');
 var shiftButton = document.querySelector('.shift-key');
@@ -110,8 +44,8 @@ var allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
 var isShiftActive = shiftButton.classList.contains('active');
 var sourceWordDisplay = document.querySelector('.source-word');
 var translatedWordDisplay = document.querySelector('.translated-word');
-searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
-    var detectedLang, targetLang, translatedWord;
+searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
+    var detectedLang, targetLang, currentWord, translatedWord;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -120,20 +54,21 @@ searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEven
                     detectedLang = determineInputLanguage(input.value);
                 }
                 catch (error) {
-                    console.log('Cannot recognize the language!');
+                    console.log(error);
+                    return [2 /*return*/];
                 }
-                targetLang = detectedLang === 'en' ? 'hy' : 'en';
+                targetLang = detectedLang === 'hy' ? 'en' : 'hy';
                 currentWord = makeNewWord(input.value, detectedLang);
-                console.log(currentWord);
-                return [4 /*yield*/, translateWord(currentWord, detectedLang, targetLang)];
+                return [4 /*yield*/, translateWordAPI(currentWord, detectedLang, targetLang)];
             case 1:
                 translatedWord = _a.sent();
-                console.log(translatedWord);
-                console.log(translationList);
-                if (translatedWord) {
-                    sourceWordDisplay.textContent = currentWord.value;
-                    translatedWordDisplay.textContent = translatedWord.value;
+                if (!translatedWord) {
+                    console.log('translation is failed');
+                    return [2 /*return*/];
                 }
+                makeNewTranslation(currentWord, translatedWord);
+                sourceWordDisplay.textContent = currentWord.value;
+                translatedWordDisplay.textContent = translatedWord.value;
                 return [2 /*return*/];
         }
     });
