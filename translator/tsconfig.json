@@ -3,7 +3,8 @@
         "sourceMap": true,
         "lib": ["ES2015", "DOM"],
         "module": "ES2015",        
-        "moduleResolution": "bundler" 
+        "moduleResolution": "bundler",
+        "outDir": "./dist"
     },
     "files": [
         "index.ts",
