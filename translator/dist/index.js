@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { makeNewWord } from "./wordService.js";
 import { determineInputLanguage, makeNewTranslation, translateWordAPI } from "./translationService.js";
+import { findSuggestions } from "./suggestionService.js";
 var input = document.querySelector('#searchInput');
 var searchButton = document.querySelector('#searchBtn');
 var shiftButton = document.querySelector('.shift-key');
@@ -44,6 +45,17 @@ var allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
 var isShiftActive = shiftButton.classList.contains('active');
 var sourceWordDisplay = document.querySelector('.source-word');
 var translatedWordDisplay = document.querySelector('.translated-word');
+var suggestedArea = document.querySelector('.chips');
+function fillInSuggestedWords(words) {
+    var fragment = document.createDocumentFragment();
+    words.forEach(function (word) {
+        var item = document.createElement('li');
+        item.classList.add('chip');
+        item.textContent = word;
+        fragment.appendChild(item);
+    });
+    suggestedArea.replaceChildren(fragment);
+}
 searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
     var detectedLang, targetLang, currentWord, translatedWord;
     return __generator(this, function (_a) {
@@ -69,6 +81,7 @@ searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEven
                 makeNewTranslation(currentWord, translatedWord);
                 sourceWordDisplay.textContent = currentWord.value;
                 translatedWordDisplay.textContent = translatedWord.value;
+                fillInSuggestedWords(findSuggestions(currentWord, 2));
                 return [2 /*return*/];
         }
     });

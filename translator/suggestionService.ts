@@ -47,11 +47,15 @@ function calculateDistance(a: string, b: string) : number {
     return distance
 }
 
-function findSuggestions(word : Word, precision : number) : String[] {
-    let suggestedWords : String[] = []
+export function findSuggestions(word : Word, precision : number) : string[] {
+    let suggestedWords : string[] = []
     //try to find similar words
     //firstly replace common look-alike symbols ձճժծ 
     //then use calc dist algorithm
     //used in UI to place in "Similar Words" section
-    return suggestedWords
+    let mockedArray : string [] = []
+    sampleDict.forEach(word => {
+      mockedArray.push(word.word)
+    });
+    return mockedArray.slice(0,5)
 }

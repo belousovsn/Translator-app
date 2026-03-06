@@ -39,15 +39,19 @@ var sampleDict = [
 //will only work for suggesting similar Armenian (HY) words
 function calculateDistance(a, b) {
     var distance = 0;
-    // cat - cot, distance = 1 since 1 letter is wrong
-    // milk - monk, distance = 2 since 2 letters are wrong
-    // milk - mlik, distance = ? (2 by default) 
-    //
+    //tbd use existing algorithm
     return distance;
 }
-function findSuggestions(word, precision) {
+export function findSuggestions(word, precision) {
     var suggestedWords = [];
-    return suggestedWords;
+    //try to find similar words
+    //firstly replace common look-alike symbols ձճժծ 
+    //then use calc dist algorithm
+    //used in UI to place in "Similar Words" section
+    var mockedArray = [];
+    sampleDict.forEach(function (word) {
+        mockedArray.push(word.word);
+    });
+    return mockedArray.slice(0, 5);
 }
-export {};
 //# sourceMappingURL=suggestionService.js.map

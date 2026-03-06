@@ -1,6 +1,7 @@
 import { makeNewWord } from "./wordService.js";
 import { determineInputLanguage, makeNewTranslation, translateWordAPI } from "./translationService.js";
 import { Language } from "./types.js";
+import { findSuggestions } from "./suggestionService.js"
 
 
 
@@ -13,6 +14,22 @@ const allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)'
 let isShiftActive = shiftButton.classList.contains('active') as boolean;
 const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElement;
 const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
+const suggestedArea = document.querySelector('.chips') as HTMLUListElement;
+
+function fillInSuggestedWords (words : string[]) {
+    const fragment = document.createDocumentFragment();
+
+    words.forEach((word) => {
+        const item = document.createElement('li');
+        item.classList.add('chip');
+        item.textContent = word;
+        fragment.appendChild(item);
+    });
+
+    suggestedArea.replaceChildren(fragment);
+}
+
+
 
 searchButton?.addEventListener('click', async () => {
     let detectedLang : Language = 'hy'
@@ -32,6 +49,7 @@ searchButton?.addEventListener('click', async () => {
     makeNewTranslation(currentWord,translatedWord)    
     sourceWordDisplay.textContent = currentWord.value;
     translatedWordDisplay.textContent = translatedWord.value;
+    fillInSuggestedWords(findSuggestions(currentWord, 2));
 });
 
 shiftButton?.addEventListener('click', () => {
