@@ -7,8 +7,10 @@ User:
         > typing is done through pop-up keyboard with language symbols
 System: 
     if the word exists in the dictionary:
-        # form with translation is displayed
+        + form with translation is displayed
         # form with suggested pictures is displayed
+            image source: https://pixabay.com/api/docs/
+            > if picture is chosen for the card - download picture and store them on an owned server 
         # button "Save as a card" is displayed
     otherwise:
         # list of similar existing words is displayed
@@ -18,3 +20,25 @@ Authenticated User:
     - saves a card
     - can see the list of saved cards
     - can open each card
+
+
+
+
+
+##################################################################################
+Refactor for Images:
+
+Sign up for Unsplash.
+Create imageService.ts.
+Write a fetchImages(query: string) function.
+TS Challenge: The Unsplash response is huge. Practice using interface to model only the parts you need (e.g., urls.small, alt_description).
+Refactor for Suggestions:
+
+Create suggestionService.ts.
+Hardcode a dummy list of 10 Armenian words in an array.
+Implement a function calculateDistance(a: string, b: string): number.
+TS Challenge: ensure your function handles the inputs strictly as strings and returns a number, and try to make the algorithm generic so it doesn't care if the language is English or Armenian.
+UI Updates:
+
+Update index.ts to call these new services.
+TS Challenge: Practice handling multiple asynchronous calls. For example, use Promise.all to fetch the Translation and the Images at the same time, rather than waiting for one to finish before starting the other.

@@ -10,6 +10,7 @@
         "index.ts",
         "translationService.ts",
         "wordService.ts",
+        "suggestionService.ts",
         "types.ts"
     ]
 }
