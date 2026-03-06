@@ -54,7 +54,7 @@ export function determineInputLanguage(inputText) {
         throw new Error("Cannot determine language from input: \"".concat(inputText, "\""));
     }
 }
-export function makeNewTranslation(sourceWord, translatedWord) {
+export function makeNewTranslationRecord(sourceWord, translatedWord) {
     return {
         id: crypto.randomUUID(),
         sourceWord: sourceWord,
@@ -81,7 +81,7 @@ export function translateWordAPI(sourceWord, sourceLang, resultLang) {
                     data = _a.sent();
                     if (data.responseStatus === 200) {
                         translatedWord = makeNewWord(data.responseData.translatedText, resultLang);
-                        translationList.push(makeNewTranslation(sourceWord, translatedWord));
+                        translationList.push(makeNewTranslationRecord(sourceWord, translatedWord));
                         return [2 /*return*/, translatedWord];
                     }
                     else {
@@ -93,6 +93,34 @@ export function translateWordAPI(sourceWord, sourceLang, resultLang) {
                     console.error("Translation failed:", error_1);
                     return [2 /*return*/, null];
                 case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+export function translateWord(word) {
+    return __awaiter(this, void 0, void 0, function () {
+        var detectedLang, targetLang, currentWord, translatedWord;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    detectedLang = 'hy';
+                    try {
+                        detectedLang = determineInputLanguage(word);
+                    }
+                    catch (error) {
+                        console.log(error);
+                        return [2 /*return*/, null];
+                    }
+                    targetLang = detectedLang === 'hy' ? 'en' : 'hy';
+                    currentWord = makeNewWord(word, detectedLang);
+                    return [4 /*yield*/, translateWordAPI(currentWord, detectedLang, targetLang)];
+                case 1:
+                    translatedWord = _a.sent();
+                    if (!translatedWord) {
+                        console.log('translation is failed');
+                        return [2 /*return*/, null];
+                    }
+                    return [2 /*return*/, { currentWord: currentWord, translatedWord: translatedWord }];
             }
         });
     });

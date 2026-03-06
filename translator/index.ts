@@ -1,6 +1,5 @@
 import { makeNewWord } from "./wordService.js";
-import { determineInputLanguage, makeNewTranslation, translateWordAPI } from "./translationService.js";
-import { Language } from "./types.js";
+import { makeNewTranslationRecord, translateWord} from "./translationService.js";
 import { findSuggestions } from "./suggestionService.js"
 
 
@@ -32,25 +31,30 @@ function fillInSuggestedWords (words : string[]) {
 
 
 searchButton?.addEventListener('click', async () => {
-    let detectedLang : Language = 'hy'
-    try {
-        detectedLang = determineInputLanguage(input.value);
-    } catch (error) {
-        console.log(error)
-        return
-    }
-    const targetLang : Language = detectedLang === 'hy' ? 'en' : 'hy'
-    const currentWord = makeNewWord(input.value, detectedLang);
-    let translatedWord = await translateWordAPI(currentWord, detectedLang, targetLang)
-    if (!translatedWord) {
-        console.log('translation is failed');
-        return
-    }
-    makeNewTranslation(currentWord,translatedWord)    
+    const translationResult = await translateWord(input.value)
+    if (!translationResult) return;
+    let { currentWord, translatedWord } = translationResult
+    makeNewTranslationRecord(currentWord,translatedWord)    
     sourceWordDisplay.textContent = currentWord.value;
     translatedWordDisplay.textContent = translatedWord.value;
     fillInSuggestedWords(findSuggestions(currentWord, 2));
 });
+
+
+suggestedArea.addEventListener('click', async (event) => {
+    const clickedArea = event.target as HTMLElement
+    const chip = clickedArea.closest('.chip') as HTMLElement | null;
+        if (!chip) return;
+    const suggestedWord = chip.textContent?.trim();
+        if (!suggestedWord) return;
+    const translationResult = await translateWord(suggestedWord)
+        if (!translationResult) return;
+    let { currentWord, translatedWord } = translationResult
+    makeNewTranslationRecord(currentWord,translatedWord)    
+    sourceWordDisplay.textContent = currentWord.value;
+    translatedWordDisplay.textContent = translatedWord.value;
+    
+})
 
 shiftButton?.addEventListener('click', () => {
     console.log('the shift button is pressed')

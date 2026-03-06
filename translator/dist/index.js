@@ -34,8 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { makeNewWord } from "./wordService.js";
-import { determineInputLanguage, makeNewTranslation, translateWordAPI } from "./translationService.js";
+import { makeNewTranslationRecord, translateWord } from "./translationService.js";
 import { findSuggestions } from "./suggestionService.js";
 var input = document.querySelector('#searchInput');
 var searchButton = document.querySelector('#searchBtn');
@@ -57,31 +56,45 @@ function fillInSuggestedWords(words) {
     suggestedArea.replaceChildren(fragment);
 }
 searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener('click', function () { return __awaiter(void 0, void 0, void 0, function () {
-    var detectedLang, targetLang, currentWord, translatedWord;
+    var translationResult, currentWord, translatedWord;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                detectedLang = 'hy';
-                try {
-                    detectedLang = determineInputLanguage(input.value);
-                }
-                catch (error) {
-                    console.log(error);
-                    return [2 /*return*/];
-                }
-                targetLang = detectedLang === 'hy' ? 'en' : 'hy';
-                currentWord = makeNewWord(input.value, detectedLang);
-                return [4 /*yield*/, translateWordAPI(currentWord, detectedLang, targetLang)];
+            case 0: return [4 /*yield*/, translateWord(input.value)];
             case 1:
-                translatedWord = _a.sent();
-                if (!translatedWord) {
-                    console.log('translation is failed');
+                translationResult = _a.sent();
+                if (!translationResult)
                     return [2 /*return*/];
-                }
-                makeNewTranslation(currentWord, translatedWord);
+                currentWord = translationResult.currentWord, translatedWord = translationResult.translatedWord;
+                makeNewTranslationRecord(currentWord, translatedWord);
                 sourceWordDisplay.textContent = currentWord.value;
                 translatedWordDisplay.textContent = translatedWord.value;
                 fillInSuggestedWords(findSuggestions(currentWord, 2));
+                return [2 /*return*/];
+        }
+    });
+}); });
+suggestedArea.addEventListener('click', function (event) { return __awaiter(void 0, void 0, void 0, function () {
+    var clickedArea, chip, suggestedWord, translationResult, currentWord, translatedWord;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                clickedArea = event.target;
+                chip = clickedArea.closest('.chip');
+                if (!chip)
+                    return [2 /*return*/];
+                suggestedWord = (_a = chip.textContent) === null || _a === void 0 ? void 0 : _a.trim();
+                if (!suggestedWord)
+                    return [2 /*return*/];
+                return [4 /*yield*/, translateWord(suggestedWord)];
+            case 1:
+                translationResult = _b.sent();
+                if (!translationResult)
+                    return [2 /*return*/];
+                currentWord = translationResult.currentWord, translatedWord = translationResult.translatedWord;
+                makeNewTranslationRecord(currentWord, translatedWord);
+                sourceWordDisplay.textContent = currentWord.value;
+                translatedWordDisplay.textContent = translatedWord.value;
                 return [2 /*return*/];
         }
     });

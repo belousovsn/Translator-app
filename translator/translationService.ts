@@ -25,7 +25,7 @@ export function determineInputLanguage (inputText : string) : Language {
         throw new Error(`Cannot determine language from input: "${inputText}"`)
     }
 }
-export function makeNewTranslation (sourceWord : Word, translatedWord : Word) : Translation {
+export function makeNewTranslationRecord (sourceWord : Word, translatedWord : Word) : Translation {
     return {
         id: crypto.randomUUID(),
         sourceWord: sourceWord,
@@ -49,7 +49,7 @@ export async function translateWordAPI (sourceWord: Word, sourceLang: Language, 
         
         if (data.responseStatus === 200) {
             let translatedWord = makeNewWord(data.responseData.translatedText, resultLang);
-            translationList.push(makeNewTranslation(sourceWord, translatedWord))
+            translationList.push(makeNewTranslationRecord(sourceWord, translatedWord))
             return translatedWord;
         } else {
             throw new Error("Translation failed");
@@ -58,4 +58,22 @@ export async function translateWordAPI (sourceWord: Word, sourceLang: Language, 
         console.error("Translation failed:", error);
         return null;
     }
+}
+
+export async function translateWord (word : string) {
+        let detectedLang : Language = 'hy'
+            try {
+                detectedLang = determineInputLanguage(word);
+            } catch (error) {
+                console.log(error)
+                return null
+            }
+        const targetLang : Language = detectedLang === 'hy' ? 'en' : 'hy'
+        const currentWord = makeNewWord(word, detectedLang);
+        let translatedWord = await translateWordAPI(currentWord, detectedLang, targetLang)
+            if (!translatedWord) {
+                console.log('translation is failed');
+                return null
+            }
+    return {currentWord, translatedWord}
 }
