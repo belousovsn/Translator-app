@@ -11,6 +11,28 @@ const russianPattern = /[\u0400-\u04FF]/;              // Cyrillic Unicode range
 
 let translationList : Translation [] = []
 
+let armenianDict: Set<string> | null = null;
+
+async function loadDictionary(): Promise<void> {
+  if (armenianDict) return;
+
+  const res = await fetch('./resources/Armenian (Eastern).json');
+  const data: { wordCount: number; entries: { word: string }[] } = await res.json();
+
+  armenianDict = new Set(data.entries.map(entry => entry.word));
+}
+
+export async function filterOutRealWords(words : string []) : Promise<string[]> {
+    await loadDictionary();
+    let realWords : string [] = words.filter(word => armenianDict!.has(word))
+    return realWords
+} 
+
+async function checkWordInDictionary(word: string): Promise<boolean> {
+  await loadDictionary();
+  return armenianDict!.has(word);
+}
+
 export function determineInputLanguage (inputText : string) : Language {
 	if (armenianPattern.test(inputText)) {
 		return 'hy';

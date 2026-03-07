@@ -1,6 +1,6 @@
 import { makeNewWord } from "./wordService.js";
-import { makeNewTranslationRecord, translateWord} from "./translationService.js";
-import { findSuggestions } from "./suggestionService.js"
+import { makeNewTranslationRecord, translateWord, filterOutRealWords} from "./translationService.js";
+import { findSuggestions, findSuggestionsByTypo, findSimilarWordsByTypo } from "./suggestionService.js"
 
 
 
@@ -37,13 +37,18 @@ function fillInSuggestedWords (words : string[]) {
 
 
 searchButton?.addEventListener('click', async () => {
+    let tempArray = findSimilarWordsByTypo(input.value)
+        console.log(tempArray)
+    let tempRealArray = await filterOutRealWords(tempArray)
+        console.log(tempRealArray)
     const translationResult = await translateWord(input.value)
     if (!translationResult) return;
     let { currentWord, translatedWord } = translationResult
     makeNewTranslationRecord(currentWord,translatedWord)    
-    sourceWordDisplay.textContent = currentWord.value;
-    translatedWordDisplay.textContent = translatedWord.value;
-    fillInSuggestedWords(findSuggestions(currentWord, 2));
+        sourceWordDisplay.textContent = currentWord.value;
+        translatedWordDisplay.textContent = translatedWord.value;
+    let suggestedWords : string [] = await findSuggestionsByTypo(currentWord)
+    fillInSuggestedWords(suggestedWords);
 });
 
 
