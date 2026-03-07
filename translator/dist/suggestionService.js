@@ -58,7 +58,7 @@ export function findSimilarWordsByTypo(str) {
                 if (letterFromSource === matchedLetter) {
                     let otherLettersInRow = [...row.slice(0, replacementIndex), ...row.slice(replacementIndex + 1)];
                     otherLettersInRow.forEach(l => {
-                        let tempArray = sourceLetters;
+                        let tempArray = [...sourceLetters];
                         tempArray[sourceLetterPos] = l;
                         let editedWord = tempArray.join("");
                         constructedWords.push(editedWord);
