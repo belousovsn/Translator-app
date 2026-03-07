@@ -11,6 +11,12 @@ const shiftButton = document.querySelector('.shift-key') as HTMLButtonElement;
 const spaceButton = document.querySelector('.space-key') as HTMLButtonElement;
 const allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
 let isShiftActive = shiftButton.classList.contains('active') as boolean;
+const keyboardToggle = document.querySelector('#keyboardToggle') as HTMLButtonElement;
+const keyboard = document.querySelector('#armenianKeyboard') as HTMLDivElement;
+
+keyboardToggle?.addEventListener('click', () => {
+    keyboard.classList.toggle('hidden');
+});
 const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElement;
 const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
 const suggestedArea = document.querySelector('.chips') as HTMLUListElement;

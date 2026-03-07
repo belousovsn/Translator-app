@@ -42,6 +42,11 @@ var shiftButton = document.querySelector('.shift-key');
 var spaceButton = document.querySelector('.space-key');
 var allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
 var isShiftActive = shiftButton.classList.contains('active');
+var keyboardToggle = document.querySelector('#keyboardToggle');
+var keyboard = document.querySelector('#armenianKeyboard');
+keyboardToggle === null || keyboardToggle === void 0 ? void 0 : keyboardToggle.addEventListener('click', function () {
+    keyboard.classList.toggle('hidden');
+});
 var sourceWordDisplay = document.querySelector('.source-word');
 var translatedWordDisplay = document.querySelector('.translated-word');
 var suggestedArea = document.querySelector('.chips');
