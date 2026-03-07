@@ -1,3 +1,5 @@
+General overview.
+
 User:
     - can register with google auth
     - can login
@@ -13,17 +15,36 @@ System:
             > if picture is chosen for the card - download picture and store them on an owned server 
         # button "Save as a card" is displayed
     otherwise:
-        # list of similar existing words is displayed
-        # words in the list are clickable
-        # if clicked, the word is put into main input and search is executed
+        + list of similar existing words is displayed
+        + words in the list are clickable
+        +- if clicked, the word is put into main input and search is executed
 Authenticated User: 
     - saves a card
     - can see the list of saved cards
     - can open each card
 
+Progress.
 
+completed:
+# input handling through typing and keyboard pop-up
+# input language detection
+# usage of tranlsation API (free version)
+# Armenian dictionary loading
+# validating a word through the dictionary
+# suggested words generation through patterns (similar letters + dictionary validating)
+# suggested words auto-translation through clicking
 
+issues:
+- possible to enter several words, not handled
+- manually input word is not checked with dictionary before sending to API
+- search cursor is not handled, every input goes to the line ending
+- no checks for invalid input
+- no UI error handling 
 
+refactor: 
+- use Promise.all for search action
+
+AI tips: 
 
 ##################################################################################
 Refactor for Images:
@@ -32,13 +53,5 @@ Sign up for Unsplash.
 Create imageService.ts.
 Write a fetchImages(query: string) function.
 TS Challenge: The Unsplash response is huge. Practice using interface to model only the parts you need (e.g., urls.small, alt_description).
-Refactor for Suggestions:
 
-Create suggestionService.ts.
-Hardcode a dummy list of 10 Armenian words in an array.
-Implement a function calculateDistance(a: string, b: string): number.
-TS Challenge: ensure your function handles the inputs strictly as strings and returns a number, and try to make the algorithm generic so it doesn't care if the language is English or Armenian.
-UI Updates:
-
-Update index.ts to call these new services.
-TS Challenge: Practice handling multiple asynchronous calls. For example, use Promise.all to fetch the Translation and the Images at the same time, rather than waiting for one to finish before starting the other.
+##################################################################################
