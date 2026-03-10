@@ -12,6 +12,9 @@
         "translationService.ts",
         "wordService.ts",
         "suggestionService.ts",
-        "types.ts"
+        "types.ts",
+        "helpers.ts",
+        "mocks.ts",
+        "locators.ts"
     ]
 }

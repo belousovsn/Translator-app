@@ -1,45 +1,22 @@
-import { makeNewTranslationRecord, translateWord, filterOutRealWords } from "./translationService.js";
-import { findSuggestionsByTypo, findSimilarWordsByTypo } from "./suggestionService.js";
-const input = document.querySelector('#searchInput');
-const searchButton = document.querySelector('#searchBtn');
-const shiftButton = document.querySelector('.shift-key');
-const spaceButton = document.querySelector('.space-key');
-const allKeys = document.querySelectorAll('.key:not(.shift-key):not(.space-key)');
-let isShiftActive = shiftButton.classList.contains('active');
-const keyboardToggle = document.querySelector('#keyboardToggle');
-const keyboard = document.querySelector('#armenianKeyboard');
-keyboardToggle === null || keyboardToggle === void 0 ? void 0 : keyboardToggle.addEventListener('click', () => {
-    keyboard.classList.toggle('hidden');
+var _a, _b, _c, _d;
+import { makeNewTranslationRecord, translateWord } from "./translationService.js";
+import { findSuggestionsByTypo } from "./suggestionService.js";
+import * as Locators from "./locators.js";
+(_a = Locators.keyboardToggle) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
+    Locators.keyboard.classList.toggle('hidden');
 });
-const sourceWordDisplay = document.querySelector('.source-word');
-const translatedWordDisplay = document.querySelector('.translated-word');
-const suggestedArea = document.querySelector('.chips');
-function fillInSuggestedWords(words) {
-    const fragment = document.createDocumentFragment();
-    words.forEach((word) => {
-        const item = document.createElement('li');
-        item.classList.add('chip');
-        item.textContent = word;
-        fragment.appendChild(item);
-    });
-    suggestedArea.replaceChildren(fragment);
-}
-searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener('click', async () => {
-    let tempArray = findSimilarWordsByTypo(input.value);
-    console.log(tempArray);
-    let tempRealArray = await filterOutRealWords(tempArray);
-    console.log(tempRealArray);
-    const translationResult = await translateWord(input.value);
+(_b = Locators.searchButton) === null || _b === void 0 ? void 0 : _b.addEventListener('click', async () => {
+    const translationResult = await translateWord(Locators.input.value);
     if (!translationResult)
         return;
     let { currentWord, translatedWord } = translationResult;
     makeNewTranslationRecord(currentWord, translatedWord);
-    sourceWordDisplay.textContent = currentWord.value;
-    translatedWordDisplay.textContent = translatedWord.value;
+    Locators.sourceWordDisplay.textContent = currentWord.value;
+    Locators.translatedWordDisplay.textContent = translatedWord.value;
     let suggestedWords = await findSuggestionsByTypo(currentWord);
     fillInSuggestedWords(suggestedWords);
 });
-suggestedArea.addEventListener('click', async (event) => {
+Locators.suggestedArea.addEventListener('click', async (event) => {
     var _a;
     const clickedArea = event.target;
     const chip = clickedArea.closest('.chip');
@@ -53,31 +30,43 @@ suggestedArea.addEventListener('click', async (event) => {
         return;
     let { currentWord, translatedWord } = translationResult;
     makeNewTranslationRecord(currentWord, translatedWord);
-    sourceWordDisplay.textContent = currentWord.value;
-    translatedWordDisplay.textContent = translatedWord.value;
+    Locators.sourceWordDisplay.textContent = currentWord.value;
+    Locators.translatedWordDisplay.textContent = translatedWord.value;
 });
-shiftButton === null || shiftButton === void 0 ? void 0 : shiftButton.addEventListener('click', () => {
-    console.log('the shift button is pressed');
-    isShiftActive = !isShiftActive;
-    if (isShiftActive) {
-        shiftButton.classList.add('active');
-        allKeys.forEach(key => {
+(_c = Locators.shiftButton) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
+    Locators.toggleShiftActive();
+    toggleCapitalizeKeyboardLetters();
+});
+Locators.allKeys.forEach(key => {
+    key === null || key === void 0 ? void 0 : key.addEventListener('click', () => {
+        Locators.input.value += key.textContent;
+    });
+});
+(_d = Locators.spaceButton) === null || _d === void 0 ? void 0 : _d.addEventListener('click', () => {
+    Locators.input.value += ' ';
+});
+function fillInSuggestedWords(words) {
+    const fragment = document.createDocumentFragment();
+    words.forEach((word) => {
+        const item = document.createElement('li');
+        item.classList.add('chip');
+        item.textContent = word;
+        fragment.appendChild(item);
+    });
+    Locators.suggestedArea.replaceChildren(fragment);
+}
+function toggleCapitalizeKeyboardLetters() {
+    if (Locators.isShiftActive) {
+        Locators.shiftButton.classList.add('active');
+        Locators.allKeys.forEach(key => {
             key.textContent = key.textContent.toUpperCase();
         });
     }
     else {
-        shiftButton.classList.remove('active');
-        allKeys.forEach(key => {
+        Locators.shiftButton.classList.remove('active');
+        Locators.allKeys.forEach(key => {
             key.textContent = key.textContent.toLowerCase();
         });
     }
-});
-allKeys.forEach(key => {
-    key === null || key === void 0 ? void 0 : key.addEventListener('click', () => {
-        input.value += key.textContent;
-    });
-});
-spaceButton === null || spaceButton === void 0 ? void 0 : spaceButton.addEventListener('click', () => {
-    input.value += ' ';
-});
+}
 //# sourceMappingURL=index.js.map

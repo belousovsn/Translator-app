@@ -1,42 +1,6 @@
 import { filterOutRealWords } from './translationService.js';
-const sampleDict = [
-    {
-        "word": "սաստկագին",
-        "flags": "DEPXAXGXIXLX"
-    },
-    {
-        "word": "սաստկական",
-        "flags": "DEABGEINLOPP"
-    },
-    {
-        "word": "սաստկակոծ",
-        "flags": "DEABGEINLOPM"
-    },
-    {
-        "word": "սաստկակսկիծ",
-        "flags": "DEPPAXGXIXLX"
-    },
-    {
-        "word": "սաստկահողմ",
-        "flags": "DEABGEINLOPM"
-    },
-    {
-        "word": "սաստկահոս",
-        "flags": "DEABGEINLOPP"
-    },
-    {
-        "word": "սաստկաձայն",
-        "flags": "DEABGEINLOPM"
-    },
-    {
-        "word": "սաստկամռունչ",
-        "flags": "DEABGEINLOPP"
-    },
-    {
-        "word": "սաստկանալ",
-        "flags": "CHVAVCDEA2G2INLO"
-    }
-];
+import * as Helpers from './helpers.js';
+import { sampleDict } from './mocks.js';
 const similarletters = [
     ["գ", "զ", "ց"],
     ["շ", "ջ", "չ"],
@@ -46,25 +10,17 @@ const similarletters = [
     ["է", "ե"],
     ["ճ", "ձ", "ծ", "ժ"]
 ];
-export function findSimilarWordsByTypo(str) {
-    let constructedWords = [];
+function findSimilarWordsByTypo(str) {
+    const constructedWords = [];
     const sourceLetters = str.split("");
-    for (let sourceLetterPos = 0; sourceLetterPos < sourceLetters.length; sourceLetterPos++) {
-        const letterFromSource = sourceLetters[sourceLetterPos];
-        similarletters.forEach(row => {
-            for (let replacementIndex = 0; replacementIndex < row.length; replacementIndex++) {
-                const matchedLetter = row[replacementIndex];
-                const matchedreplacementIndex = replacementIndex;
-                if (letterFromSource === matchedLetter) {
-                    let otherLettersInRow = [...row.slice(0, replacementIndex), ...row.slice(replacementIndex + 1)];
-                    otherLettersInRow.forEach(l => {
-                        let tempArray = [...sourceLetters];
-                        tempArray[sourceLetterPos] = l;
-                        let editedWord = tempArray.join("");
-                        constructedWords.push(editedWord);
-                    });
-                }
-            }
+    for (let pos = 0; pos < sourceLetters.length; pos++) {
+        const letterFromSource = sourceLetters[pos];
+        const replacements = Helpers.getSimilarReplacementsForLetter(letterFromSource, similarletters);
+        if (replacements.length === 0)
+            continue;
+        replacements.forEach(replacement => {
+            const editedWord = Helpers.replaceLetterInStringByIndex(str, pos, replacement);
+            constructedWords.push(editedWord);
         });
     }
     return constructedWords;
@@ -76,8 +32,7 @@ function calculateDistance(a, b) {
     return distance;
 }
 export async function findSuggestionsByTypo(word) {
-    let suggestedWords = filterOutRealWords(findSimilarWordsByTypo(word.value));
-    return suggestedWords;
+    return filterOutRealWords(findSimilarWordsByTypo(word.value));
 }
 export function findSuggestions(word, precision) {
     let suggestedWords = [];
