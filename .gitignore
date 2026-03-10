@@ -1,4 +1,5 @@
 .env
 ./assets
 decks&cards/default cards.json
-.gitignore
+translator/dist
+translator/.vscode
