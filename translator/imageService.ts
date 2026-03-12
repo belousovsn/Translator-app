@@ -1,5 +1,5 @@
-import { ImageDTO } from "./types";
-import * as Mocks from "./mocks";
+import { ImageDTO } from "./types.js";
+import * as Mocks from "./mocks.js";
 
 // Keep mocks as default until Unsplash access is approved.
 const USE_IMAGE_MOCKS = true;

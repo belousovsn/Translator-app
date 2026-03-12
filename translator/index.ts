@@ -1,7 +1,9 @@
 import { makeNewWord } from "./wordService.js";
-import { makeNewTranslationRecord, translateWord} from "./translationService.js";
+import { determineInputLanguage, makeNewTranslationRecord, translateWord} from "./translationService.js";
 import { findSuggestions, findSuggestionsByTypo} from "./suggestionService.js"
+import { getSuggestedImages } from "./imageService.js"
 import * as Locators from "./locators.js"
+import { ImageDTO } from "./types.js";
 
 
 
@@ -20,6 +22,9 @@ Locators.searchButton?.addEventListener('click', async () => {
         Locators.translatedWordDisplay.textContent = translatedWord.value;
     let suggestedWords : string [] = await findSuggestionsByTypo(currentWord)
     fillInSuggestedWords(suggestedWords);
+    let englishWord = determineInputLanguage(currentWord.value) === 'en' ? currentWord.value : translatedWord.value
+    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord,2,true)
+    fillInSuggestedImages(suggestedImages)
 });
 
 
@@ -35,7 +40,9 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
     makeNewTranslationRecord(currentWord,translatedWord)    
         Locators.sourceWordDisplay.textContent = currentWord.value;
         Locators.translatedWordDisplay.textContent = translatedWord.value;
-    
+    let englishWord = determineInputLanguage(currentWord.value) === 'en' ? currentWord.value : translatedWord.value
+    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord,2,true)
+    fillInSuggestedImages(suggestedImages)
 })
 
 Locators.shiftButton?.addEventListener('click', () => {
@@ -63,6 +70,23 @@ function fillInSuggestedWords (words : string[]) {
     });
 
     Locators.suggestedArea.replaceChildren(fragment);
+}
+
+function fillInSuggestedImages (images : ImageDTO[]) {
+    const fragment = document.createDocumentFragment();
+
+    images.forEach(image => {
+        const item = document.createElement('li');
+        item.classList.add('image-item');
+
+        const img = document.createElement('img')
+            img.src = image.urlSmall;
+            img.alt = image.wordValue;
+        item.appendChild(img);
+        fragment.appendChild(item)
+    });
+
+    Locators.imagesArea.replaceChildren(fragment);
 }
 
 function toggleCapitalizeKeyboardLetters() {

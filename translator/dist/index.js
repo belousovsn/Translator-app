@@ -1,6 +1,7 @@
 var _a, _b, _c, _d;
-import { makeNewTranslationRecord, translateWord } from "./translationService.js";
+import { determineInputLanguage, makeNewTranslationRecord, translateWord } from "./translationService.js";
 import { findSuggestionsByTypo } from "./suggestionService.js";
+import { getSuggestedImages } from "./imageService.js";
 import * as Locators from "./locators.js";
 (_a = Locators.keyboardToggle) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
     Locators.keyboard.classList.toggle('hidden');
@@ -15,6 +16,9 @@ import * as Locators from "./locators.js";
     Locators.translatedWordDisplay.textContent = translatedWord.value;
     let suggestedWords = await findSuggestionsByTypo(currentWord);
     fillInSuggestedWords(suggestedWords);
+    let englishWord = determineInputLanguage(currentWord.value) === 'en' ? currentWord.value : translatedWord.value;
+    let suggestedImages = await getSuggestedImages(englishWord, 2, true);
+    fillInSuggestedImages(suggestedImages);
 });
 Locators.suggestedArea.addEventListener('click', async (event) => {
     var _a;
@@ -32,6 +36,9 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
     makeNewTranslationRecord(currentWord, translatedWord);
     Locators.sourceWordDisplay.textContent = currentWord.value;
     Locators.translatedWordDisplay.textContent = translatedWord.value;
+    let englishWord = determineInputLanguage(currentWord.value) === 'en' ? currentWord.value : translatedWord.value;
+    let suggestedImages = await getSuggestedImages(englishWord, 2, true);
+    fillInSuggestedImages(suggestedImages);
 });
 (_c = Locators.shiftButton) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
     Locators.toggleShiftActive();
@@ -54,6 +61,19 @@ function fillInSuggestedWords(words) {
         fragment.appendChild(item);
     });
     Locators.suggestedArea.replaceChildren(fragment);
+}
+function fillInSuggestedImages(images) {
+    const fragment = document.createDocumentFragment();
+    images.forEach(image => {
+        const item = document.createElement('li');
+        item.classList.add('image-item');
+        const img = document.createElement('img');
+        img.src = image.urlSmall;
+        img.alt = image.wordValue;
+        item.appendChild(img);
+        fragment.appendChild(item);
+    });
+    Locators.imagesArea.replaceChildren(fragment);
 }
 function toggleCapitalizeKeyboardLetters() {
     if (Locators.isShiftActive) {

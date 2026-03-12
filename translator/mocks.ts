@@ -36,7 +36,14 @@ export const sampleDict = [
       "flags": "CHVAVCDEA2G2INLO"
     }
 ]
-export const imageMocksByWord : Record<string, string[]> = {
-  "squirrel" : ["https://i.imgur.com/N3BB3Q1.jpeg","https://i.imgur.com/9O7brbZ.jpeg"],
-  "noimage" : []
+export const imageMocksByWord: Record<string, string[]> = {
+  "squirrel": [
+    "https://picsum.photos/seed/squirrel1/300/200",
+    "https://picsum.photos/seed/squirrel2/300/200"
+  ],
+  "cat": [
+    "https://picsum.photos/seed/cat1/300/200",
+    "https://picsum.photos/seed/cat2/300/200"
+  ],
+  "noimage": []
 }

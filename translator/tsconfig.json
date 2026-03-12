@@ -13,6 +13,7 @@
         "translationService.ts",
         "wordService.ts",
         "suggestionService.ts",
+        "imageService.ts",
         "types.ts",
         "helpers.ts",
         "mocks.ts",
