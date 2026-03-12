@@ -15,3 +15,11 @@ export interface Translation {
     sourceWord : Word
     translatedWord : Word
 }
+
+export interface ImageDTO {
+    id : string
+    urlSmall : string
+    urlLarge : string
+    wordValue : string
+    description : string
+}
