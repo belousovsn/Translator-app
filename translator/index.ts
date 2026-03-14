@@ -1,7 +1,10 @@
 import { makeNewWord } from "./wordService.js";
-import { makeNewTranslationRecord, translateWord} from "./translationService.js";
+import { determineInputLanguage, makeNewTranslationRecord, translateWord} from "./translationService.js";
 import { findSuggestions, findSuggestionsByTypo} from "./suggestionService.js"
+import { getSuggestedImages } from "./imageService.js"
 import * as Locators from "./locators.js"
+import { ImageDTO } from "./types.js";
+import { findWordByLanguage, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
 
 
 
@@ -14,12 +17,12 @@ Locators.keyboardToggle?.addEventListener('click', () => {
 Locators.searchButton?.addEventListener('click', async () => {
     const translationResult = await translateWord(Locators.input.value)
     if (!translationResult) return;
-    let { currentWord, translatedWord } = translationResult
-    makeNewTranslationRecord(currentWord,translatedWord)    
-        Locators.sourceWordDisplay.textContent = currentWord.value;
-        Locators.translatedWordDisplay.textContent = translatedWord.value;
-    let suggestedWords : string [] = await findSuggestionsByTypo(currentWord)
-    fillInSuggestedWords(suggestedWords);
+    renderTranslation(translationResult)
+    await Promise.all([
+        renderSuggestedWords(translationResult),
+        renderImages(translationResult)
+    ])
+    
 });
 
 
@@ -31,11 +34,9 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
         if (!suggestedWord) return;
     const translationResult = await translateWord(suggestedWord)
         if (!translationResult) return;
-    let { currentWord, translatedWord } = translationResult
-    makeNewTranslationRecord(currentWord,translatedWord)    
-        Locators.sourceWordDisplay.textContent = currentWord.value;
-        Locators.translatedWordDisplay.textContent = translatedWord.value;
-    
+    renderTranslation(translationResult)
+    //may put renderSuggestedWords here in case needed
+    await renderImages(translationResult)
 })
 
 Locators.shiftButton?.addEventListener('click', () => {
@@ -52,18 +53,9 @@ Locators.spaceButton?.addEventListener('click', () => {
 })
 
 
-function fillInSuggestedWords (words : string[]) {
-    const fragment = document.createDocumentFragment();
 
-    words.forEach((word) => {
-        const item = document.createElement('li');
-        item.classList.add('chip');
-        item.textContent = word;
-        fragment.appendChild(item);
-    });
 
-    Locators.suggestedArea.replaceChildren(fragment);
-}
+
 
 function toggleCapitalizeKeyboardLetters() {
     if (Locators.isShiftActive) {

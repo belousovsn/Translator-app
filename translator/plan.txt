@@ -5,14 +5,14 @@ User:
     - can login
     - can logout
 User:
-    - types in a word in foreign language (Armenian)
+    + types in a word in foreign language (Armenian)
         > typing is done through pop-up keyboard with language symbols
 System: 
     if the word exists in the dictionary:
         + form with translation is displayed
-        # form with suggested pictures is displayed
+        + form with suggested pictures is displayed
             image source: https://pixabay.com/api/docs/
-            > if picture is chosen for the card - download picture and store them on an owned server 
+            # if picture is chosen for the card - download picture and store them on an owned server 
         # button "Save as a card" is displayed
     otherwise:
         + list of similar existing words is displayed

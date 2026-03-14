@@ -9,6 +9,7 @@ export const keyboard = document.querySelector('#armenianKeyboard') as HTMLDivEl
 export const sourceWordDisplay = document.querySelector('.source-word') as HTMLSpanElement;
 export const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
 export const suggestedArea = document.querySelector('.chips') as HTMLUListElement;
+export const imagesArea = document.querySelector('.image-list') as HTMLUListElement;
 
 export function toggleShiftActive(): void {
   isShiftActive = !isShiftActive;
