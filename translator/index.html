@@ -20,45 +20,94 @@
         <main class="content-area">
             <div class="layout-container">
                 <div class="main-content">
-                    <div class="search-container">
-                        <div class="search-row">
-                            <div class="search-tools">
-                                <div class="language-dropdown">
-                                    <button type="button" class="tool-button" id="langBtn" aria-label="Select language">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"/>
-                                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                                        </svg>
-                                        <span class="lang-code">HY</span>
-                                        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M6 9l6 6 6-6"/>
-                                        </svg>
-                                    </button>
-                                    <ul class="language-menu hidden" id="langMenu">
-                                        <li data-lang="hy" class="active">Armenian (Eastern)</li>
-                                        <li data-lang="ru">Russian</li>
-                                        <li data-lang="es">Spanish</li>
-                                        <li data-lang="fr">French</li>
-                                    </ul>
+                    <section class="translation-sections">
+                        <div class="panel input-panel">
+                            <div class="panel-body">
+                                <div class="search-box">
+                                    <div class="search-tools">
+                                        <div class="language-dropdown">
+                                            <button type="button" class="tool-button" id="langBtn" aria-label="Select language">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <circle cx="12" cy="12" r="10"/>
+                                                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                                </svg>
+                                                <span class="lang-code">HY</span>
+                                                <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M6 9l6 6 6-6"/>
+                                                </svg>
+                                            </button>
+                                            <ul class="language-menu hidden" id="langMenu">
+                                                <li data-lang="hy" class="active">Armenian (Eastern)</li>
+                                                <li data-lang="ru">Russian</li>
+                                                <li data-lang="es">Spanish</li>
+                                                <li data-lang="fr">French</li>
+                                            </ul>
+                                        </div>
+                                        <button type="button" class="tool-button" id="keyboardToggle" aria-label="Toggle keyboard">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="2" y="4" width="20" height="14" rx="2"/>
+                                                <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        class="search-input" 
+                                        placeholder="Type in a new word"
+                                        id="searchInput"
+                                    >
+                                    <button class="search-button" id="searchBtn" type="button">Search</button>
                                 </div>
-                                <button type="button" class="tool-button" id="keyboardToggle" aria-label="Toggle keyboard">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="2" y="4" width="20" height="14" rx="2"/>
-                                        <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="search-box">
-                                <input 
-                                    type="text" 
-                                    class="search-input" 
-                                    placeholder="Type in a new word"
-                                    id="searchInput"
-                                >
-                                <button class="search-button" id="searchBtn" type="button">Search</button>
                             </div>
                         </div>
-                        <div id="armenianKeyboard" class="keyboard hidden">
+
+                        <div class="panel translation-panel">
+                            <div class="panel-body">
+                                <div class="translation-block">
+                                    <span class="value source-word"></span>
+                                    <span class="value translated-word"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="panel suggestions-panel">
+                        <div class="panel-header">Similar Words</div>
+                        <div class="panel-body">
+                            <ul class="chips" aria-label="Similar words suggestions">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="panel images-panel">
+                        <div class="panel-body">
+                            <ul class="image-list" aria-label="Related images">
+                                <li class="image-item" aria-label="Mock image 1"></li>
+                                <li class="image-item" aria-label="Mock image 2"></li>
+                                <li class="image-item" aria-label="Mock image 3"></li>
+                                <li class="image-item" aria-label="Mock image 4"></li>
+                                <li class="image-item" aria-label="Mock image 5"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button type="button" class="primary-button" id="makeCardBtn">Make a card</button>
+
+                    <div class="panel card-panel hidden" id="cardPanel">
+                        <div class="panel-header">New Card</div>
+                        <div class="panel-body">
+                            <div class="card-template">
+                                <div class="card-word source-card-word">—</div>
+                                <div class="card-word translated-card-word">—</div>
+                                <div class="card-image-placeholder"></div>
+                                <button type="button" class="primary-button" id="saveCardBtn">Save Card</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="armenianKeyboard" class="keyboard hidden">
                         <div class="keyboard-row">
                             <button type="button" class="key">ա</button>
                             <button type="button" class="key">բ</button>
@@ -108,60 +157,9 @@
                         </div>
                         <div class="keyboard-row">
                             <button type="button" class="key shift-key">Shift</button>
-                                <button type="button" class="key wide space-key">Space</button>
+                            <button type="button" class="key wide space-key">Space</button>
                         </div>
                     </div>
-                </div>
-                    <div class="content-sections">
-                        <div class="panel suggestions-panel">
-                            <div class="panel-header">Similar Words</div>
-                            <div class="panel-body">
-                                <ul class="chips" aria-label="Similar words suggestions">
-                                </ul>
-                            </div>
-                        </div>
-                
-                        <div class="panel translation-panel">
-                            <div class="panel-header">Translation Result</div>
-                            <div class="panel-body">
-                                <div class="translation-block">
-                                    <div class="translation-row"><span class="label">Source:</span> <span class="value source-word"></span></div>
-                                    <div class="translation-row"><span class="label">Translation:</span> <span class="value translated-word"></span></div>
-                                </div>
-                            </div>
-                        </div>
-                
-
-                    </div>
-            
-                    <div class="panel images-panel">
-                        <div class="panel-header">Images</div>
-                        <div class="panel-body">
-                            <ul class="image-list" aria-label="Related images">
-                                <li class="image-item" aria-label="Mock image 1"></li>
-                                <li class="image-item" aria-label="Mock image 2"></li>
-                                <li class="image-item" aria-label="Mock image 3"></li>
-                                <li class="image-item" aria-label="Mock image 4"></li>
-                                <li class="image-item" aria-label="Mock image 5"></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <aside class="right-sidebar">
-                    <button type="button" class="primary-button" id="makeCardBtn">Make a card</button>
-                    <div class="panel card-panel hidden" id="cardPanel">
-                        <div class="panel-header">New Card</div>
-                        <div class="panel-body">
-                            <div class="card-template">
-                                <div class="card-word source-card-word">—</div>
-                                <div class="card-word translated-card-word">—</div>
-                                <div class="card-image-placeholder"></div>
-                                <button type="button" class="primary-button" id="saveCardBtn">Save Card</button>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
         </main>
     </div>
 
