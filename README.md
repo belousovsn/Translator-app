@@ -37,4 +37,4 @@ Backend (TS) - braincoded
 - translation caching
 
 # Demo
-![Demo](translator/resources/translateDemo.gif)
+![Demo](translator/resources/translateDemo_2.gif)
