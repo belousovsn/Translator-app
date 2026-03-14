@@ -82,7 +82,7 @@ export async function translateWordAPI (sourceWord: Word, sourceLang: Language, 
     }
 }
 
-export async function translateWord (word : string) {
+export async function translateWord (word : string) : Promise<Translation | null> {
         let detectedLang : Language = 'hy'
             try {
                 detectedLang = determineInputLanguage(word);
@@ -97,5 +97,6 @@ export async function translateWord (word : string) {
                 console.log('translation is failed');
                 return null
             }
-    return {currentWord, translatedWord}
+        
+    return makeNewTranslationRecord(currentWord, translatedWord)
 }

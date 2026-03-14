@@ -4,7 +4,7 @@ import { findSuggestions, findSuggestionsByTypo} from "./suggestionService.js"
 import { getSuggestedImages } from "./imageService.js"
 import * as Locators from "./locators.js"
 import { ImageDTO } from "./types.js";
-import { findWordByLanguage } from "./helpers.js";
+import { findWordByLanguage, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
 
 
 
@@ -17,15 +17,12 @@ Locators.keyboardToggle?.addEventListener('click', () => {
 Locators.searchButton?.addEventListener('click', async () => {
     const translationResult = await translateWord(Locators.input.value)
     if (!translationResult) return;
-    let { currentWord, translatedWord } = translationResult
-    makeNewTranslationRecord(currentWord,translatedWord)    
-        Locators.sourceWordDisplay.textContent = currentWord.value;
-        Locators.translatedWordDisplay.textContent = translatedWord.value;
-    let suggestedWords : string [] = await findSuggestionsByTypo(currentWord)
-    fillInSuggestedWords(suggestedWords);
-    let englishWord = findWordByLanguage('en', currentWord, translatedWord)
-    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,2,true)
-    fillInSuggestedImages(suggestedImages)
+    renderTranslation(translationResult)
+    await Promise.all([
+        renderSuggestedWords(translationResult),
+        renderImages(translationResult)
+    ])
+    
 });
 
 
@@ -37,13 +34,9 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
         if (!suggestedWord) return;
     const translationResult = await translateWord(suggestedWord)
         if (!translationResult) return;
-    let { currentWord, translatedWord } = translationResult
-    makeNewTranslationRecord(currentWord,translatedWord)    
-        Locators.sourceWordDisplay.textContent = currentWord.value;
-        Locators.translatedWordDisplay.textContent = translatedWord.value;
-    let englishWord = findWordByLanguage('en', currentWord, translatedWord)
-    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,2,true)
-    fillInSuggestedImages(suggestedImages)
+    renderTranslation(translationResult)
+    //may put renderSuggestedWords here in case needed
+    await renderImages(translationResult)
 })
 
 Locators.shiftButton?.addEventListener('click', () => {
@@ -60,35 +53,9 @@ Locators.spaceButton?.addEventListener('click', () => {
 })
 
 
-function fillInSuggestedWords (words : string[]) {
-    const fragment = document.createDocumentFragment();
 
-    words.forEach((word) => {
-        const item = document.createElement('li');
-        item.classList.add('chip');
-        item.textContent = word;
-        fragment.appendChild(item);
-    });
 
-    Locators.suggestedArea.replaceChildren(fragment);
-}
 
-function fillInSuggestedImages (images : ImageDTO[]) {
-    const fragment = document.createDocumentFragment();
-
-    images.forEach(image => {
-        const item = document.createElement('li');
-        item.classList.add('image-item');
-
-        const img = document.createElement('img')
-            img.src = image.urlSmall;
-            img.alt = image.wordValue;
-        item.appendChild(img);
-        fragment.appendChild(item)
-    });
-
-    Locators.imagesArea.replaceChildren(fragment);
-}
 
 function toggleCapitalizeKeyboardLetters() {
     if (Locators.isShiftActive) {
