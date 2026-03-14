@@ -53,7 +53,7 @@ export async function renderImages(translationResult : Translation, useImagesMoc
         console.log("Can't access image service, no English word is present for it")
         return
     }
-    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,2,useImagesMocks)
+    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,4,useImagesMocks)
     fillInSuggestedImages(suggestedImages)
 }
 

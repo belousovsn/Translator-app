@@ -3,8 +3,42 @@ import * as Mocks from "./mocks.js";
 import { loadLocalSettings } from "./helpers.js";
 
 
-// Keep mocks as default until Unsplash access is approved.
 const USE_IMAGE_MOCKS = true;
+
+type imageCacheEntry = {
+    data: ImageDTO[]
+    createdAt: number
+    ttlMs: number
+}
+const imageCache = new Map<string,imageCacheEntry>()
+const CACHE_TTL_MS = 20 * 60 * 1000
+
+function makeCacheKey(str: string, limit: number) {
+    return `${str}|${limit}`
+}
+function getFromCache(key: string): ImageDTO[] | null {
+    const raw = localStorage.getItem(key)
+    if (!raw) return null
+
+    try {
+        const entry = JSON.parse(raw) as imageCacheEntry
+        const expired = Date.now() - entry.createdAt > entry.ttlMs
+
+        if(expired) {
+            localStorage.removeItem(key)
+            return null
+        }
+        return entry.data
+    } catch {
+        localStorage.removeItem(key)
+        return null
+    }
+}
+function saveToCache(key: string, data: ImageDTO[], ttlMs: number): void {
+    const entry: imageCacheEntry = {data, createdAt: Date.now(), ttlMs}
+    localStorage.setItem(key, JSON.stringify(entry))
+}
+
 
 async function getImagesFromAPI(str: string, limit?: number): Promise<ImageDTO[]> {
     const perPage = limit ?? 5;
@@ -15,8 +49,8 @@ async function getImagesFromAPI(str: string, limit?: number): Promise<ImageDTO[]
 
     const response = await fetch(url);
     const data = await response.json();
+    const items = data.results;
 
-    const items = Array.isArray(data?.results) ? data.results : [];
     const mapped: ImageDTO[] = items.map((item: any) => ({
         id: item.id,
         urlSmall: item.urls?.small ?? "",
@@ -44,10 +78,15 @@ async function getImagesFromMock(str: string, limit?: number): Promise<ImageDTO[
 
 export async function getSuggestedImages(
     str: string,
-    limit?: number,
+    limit: number = 5,
     useImagesMocks: boolean = USE_IMAGE_MOCKS
 ): Promise<ImageDTO[]> {
-    return useImagesMocks
-        ? getImagesFromMock(str, limit)
-        : getImagesFromAPI(str, limit);
+    const key = makeCacheKey(str, limit)
+    const cached = getFromCache(str)
+    if (cached) return cached
+    if(useImagesMocks) return getImagesFromMock(str, limit)
+
+    const freshImages = await getImagesFromAPI(str, limit)
+    saveToCache(str, freshImages, CACHE_TTL_MS)
+    return freshImages
 }
