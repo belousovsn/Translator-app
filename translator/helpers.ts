@@ -1,7 +1,10 @@
-import { Language, Translation, Word, ImageDTO } from "./types.js"
+import { Language, Translation, Word, ImageDTO, LocalSettings } from "./types.js"
 import * as Locators from './locators.js'
 import { getSuggestedImages } from "./imageService.js"
 import { findSuggestionsByTypo } from "./suggestionService.js"
+
+
+let localSettingsCache: LocalSettings | null = null;
 
 export function replaceLetterInStringByIndex (
     string : string, 
@@ -44,13 +47,13 @@ export function renderTranslation (translationResult : Translation) {
     Locators.translatedWordDisplay.textContent = translationResult.translatedWord.value;
 }
 
-export async function renderImages(translationResult : Translation) {
+export async function renderImages(translationResult : Translation, useImagesMocks : boolean = false) {
     let englishWord = findWordByLanguage('en', translationResult.sourceWord, translationResult.translatedWord)
     if (!englishWord) {
         console.log("Can't access image service, no English word is present for it")
         return
     }
-    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,2,true)
+    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,2,useImagesMocks)
     fillInSuggestedImages(suggestedImages)
 }
 
@@ -86,4 +89,27 @@ function fillInSuggestedWords (words : string[]) {
     });
 
     Locators.suggestedArea.replaceChildren(fragment);
+}
+
+
+export async function loadLocalSettings() : Promise<LocalSettings> {
+    if (localSettingsCache) {
+        return localSettingsCache;
+    }
+
+    const res = await fetch('./localSettings.json');
+    if (!res.ok) {
+        throw new Error('Failed to load localSettings.json');
+    }
+
+    const data = await res.json() as Partial<LocalSettings>;
+    if (!data.UNSPLASH_ACCESS_KEY) {
+        throw new Error('UNSPLASH_ACCESS_KEY is missing in localSettings.json');
+    }
+
+    localSettingsCache = {
+        UNSPLASH_ACCESS_KEY: data.UNSPLASH_ACCESS_KEY
+    };
+
+    return localSettingsCache;
 }

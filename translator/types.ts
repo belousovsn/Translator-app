@@ -23,3 +23,7 @@ export interface ImageDTO {
     wordValue : string
     description : string
 }
+
+export interface LocalSettings {
+    UNSPLASH_ACCESS_KEY: string
+}

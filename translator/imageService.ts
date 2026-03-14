@@ -1,14 +1,17 @@
 import { ImageDTO } from "./types.js";
 import * as Mocks from "./mocks.js";
+import { loadLocalSettings } from "./helpers.js";
+
 
 // Keep mocks as default until Unsplash access is approved.
 const USE_IMAGE_MOCKS = true;
 
 async function getImagesFromAPI(str: string, limit?: number): Promise<ImageDTO[]> {
-    const perPage = limit ?? 10;
+    const perPage = limit ?? 5;
+    const settings = await loadLocalSettings();
     const url =
         `https://api.unsplash.com/search/photos?query=${encodeURIComponent(str)}` +
-        `&per_page=${perPage}&client_id=YOUR_ACCESS_KEY`;
+        `&per_page=${perPage}&client_id=${encodeURIComponent(settings.UNSPLASH_ACCESS_KEY)}`;
 
     const response = await fetch(url);
     const data = await response.json();

@@ -1,4 +1,4 @@
-import {Word, Translation, Language} from './types.js'
+import {Word, Translation, Language, LocalSettings} from './types.js'
 import { makeNewWord } from './wordService.js';
 
 // MyMemory Translation API
@@ -17,10 +17,15 @@ async function loadDictionary(): Promise<void> {
   if (armenianDict) return;
 
   const res = await fetch('./resources/Armenian (Eastern).json');
-  const data: { wordCount: number; entries: { word: string }[] } = await res.json();
+  const data: { 
+    wordCount: number; 
+    entries: { word: string }[] 
+} = await res.json();
 
   armenianDict = new Set(data.entries.map(entry => entry.word));
 }
+
+
 
 export async function filterOutRealWords(words : string []) : Promise<string[]> {
     await loadDictionary();
