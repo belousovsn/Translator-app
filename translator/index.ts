@@ -4,6 +4,7 @@ import { findSuggestions, findSuggestionsByTypo} from "./suggestionService.js"
 import { getSuggestedImages } from "./imageService.js"
 import * as Locators from "./locators.js"
 import { ImageDTO } from "./types.js";
+import { findWordByLanguage } from "./helpers.js";
 
 
 
@@ -22,8 +23,8 @@ Locators.searchButton?.addEventListener('click', async () => {
         Locators.translatedWordDisplay.textContent = translatedWord.value;
     let suggestedWords : string [] = await findSuggestionsByTypo(currentWord)
     fillInSuggestedWords(suggestedWords);
-    let englishWord = determineInputLanguage(currentWord.value) === 'en' ? currentWord.value : translatedWord.value
-    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord,2,true)
+    let englishWord = findWordByLanguage('en', currentWord, translatedWord)
+    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,2,true)
     fillInSuggestedImages(suggestedImages)
 });
 
@@ -40,8 +41,8 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
     makeNewTranslationRecord(currentWord,translatedWord)    
         Locators.sourceWordDisplay.textContent = currentWord.value;
         Locators.translatedWordDisplay.textContent = translatedWord.value;
-    let englishWord = determineInputLanguage(currentWord.value) === 'en' ? currentWord.value : translatedWord.value
-    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord,2,true)
+    let englishWord = findWordByLanguage('en', currentWord, translatedWord)
+    let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,2,true)
     fillInSuggestedImages(suggestedImages)
 })
 

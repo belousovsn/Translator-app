@@ -1,3 +1,5 @@
+import { Language, Word } from "./types.js"
+
 export function replaceLetterInStringByIndex (
     string : string, 
     position : number, 
@@ -28,4 +30,8 @@ export function getSimilarReplacementsForLetter(
         return removeElementFromArrayByIndex(row, index);
     }
     return [];
+}
+
+export function findWordByLanguage (language: Language, ...words : Word[]) {
+    return words.find(w => w.language === language)
 }
