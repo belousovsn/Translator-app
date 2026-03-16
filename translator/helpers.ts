@@ -91,7 +91,7 @@ function fillInSuggestedWords (words : string[]) {
     Locators.suggestedArea.replaceChildren(fragment);
 }
 
-
+//this function is suggested by AI and is only here because I've got no bundler
 export async function loadLocalSettings() : Promise<LocalSettings> {
     if (localSettingsCache) {
         return localSettingsCache;
