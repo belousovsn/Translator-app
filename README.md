@@ -17,7 +17,7 @@ Backend (TS) - braincoded
 - validating a word through local dictionary
 - suggested words generation through patterns (similar letters + dictionary validating)
 - suggested words auto-translation through clicking
-- image suggestions by English word (mocked)
+- image suggestions by English word with caching
 
 ### issues:
 - possible to enter several words, not handled
@@ -37,4 +37,4 @@ Backend (TS) - braincoded
 - translation caching
 
 # Demo
-![Demo](translator/resources/translateDemo.gif)
+![Demo](translator/resources/translateDemo_2.gif)
