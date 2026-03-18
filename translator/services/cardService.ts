@@ -1,9 +1,10 @@
 import {Translation, ImageDTO, Word, User, Card} from '../types.js'
+import {supabase} from '../supabase-client.js'
 
-export async function createCard (
+export function createCard (
     translation : Translation, 
     image : ImageDTO, 
-    user?: User) : Promise<Card> {
+    user?: User) : Card {
     const newCard : Card = {
         id: crypto.randomUUID(),
         createdAt: Date.now(),
@@ -14,8 +15,22 @@ export async function createCard (
         imageUrlLarge: image.urlLarge,
         user: user
     }
-    //insert into DB
     return newCard
+}
+
+export async function saveCardToDB(card : Card) {
+    const row = {
+        id: card.id,
+        source_lang: card.languagePair[0],
+        target_lang: card.languagePair[1],
+        source_word: card.translation.sourceWord.value,
+        target_word: card.translation.translatedWord.value,
+        img_url_small: card.imageUrlSmall,
+        img_url_large: card.imageUrlLarge,
+        user: card.user ?? null
+    }
+    const {error} = await supabase.from("Cards").insert(row).single()
+    if(error) {console.error("Error adding Card to DB", error.message)}
 }
 //only allow image updates
 function updateCard (

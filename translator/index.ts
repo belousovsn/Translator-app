@@ -1,16 +1,14 @@
-import { makeNewWord } from "./services/wordService.js";
-import { determineInputLanguage, makeNewTranslationRecord, translateWord} from "./services/translationService.js";
-import { findSuggestions, findSuggestionsByTypo} from "./services/suggestionService.js"
-import { getSuggestedImages } from "./services/imageService.js"
+import { translateWord} from "./services/translationService.js";
 import * as Locators from "./locators.js"
-import { ImageDTO, Translation, Word } from "./types.js";
-import { findWordByLanguage, renderCard, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
-import { createCard } from './services/cardService.js'
+import { ImageDTO, Translation, Card } from "./types.js";
+import { renderCard, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
+import { createCard, saveCardToDB } from './services/cardService.js'
 
 
 let currentTranslation : Translation = null
 let currentImages : ImageDTO[] = []
 let currentSuggestedWords : string[] = []
+let currentCard : Card = null
 
 Locators.keyboardToggle?.addEventListener('click', () => {
     Locators.keyboard.classList.toggle('hidden');
@@ -29,7 +27,8 @@ Locators.searchButton?.addEventListener('click', async () => {
     ])
     currentSuggestedWords = suggestedWords
     currentImages = images
-    renderCard(currentTranslation,currentImages[0])
+    currentCard = createCard(currentTranslation, currentImages[0])
+    renderCard(currentCard)
 });
 
 
@@ -45,12 +44,14 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
     renderTranslation(translationResult)
     //may put renderSuggestedWords here in case needed
     currentImages = await renderImages(translationResult)
-    renderCard(currentTranslation,currentImages[0])
+    currentCard = createCard(currentTranslation, currentImages[0])
+    renderCard(currentCard)
 })
 
 Locators.makeCardButton.addEventListener('click', async () => {
-    const newCard  = await createCard(currentTranslation, currentImages[0])
-    console.log(newCard)
+    const saveCardResult = await saveCardToDB(currentCard)
+
+    console.log(saveCardResult)
 })
 
 Locators.shiftButton?.addEventListener('click', () => {

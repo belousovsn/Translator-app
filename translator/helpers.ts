@@ -1,4 +1,4 @@
-import { Language, Translation, Word, ImageDTO, LocalSettings } from "./types.js"
+import { Language, Translation, Word, ImageDTO, LocalSettings, Card } from "./types.js"
 import * as Locators from './locators.js'
 import { getSuggestedImages } from "./services/imageService.js"
 import { findSuggestionsByTypo } from "./services/suggestionService.js"
@@ -66,19 +66,19 @@ export async function renderSuggestedWords(translationResult : Translation) : Pr
     return suggestedWords
 }
 
-export function renderCard (translationResult : Translation, image: ImageDTO) {
+export function renderCard (card : Card) {
     const frontImg = document.createElement('img');
-    frontImg.src = image.urlSmall;
-    frontImg.alt = translationResult.sourceWord.value;
+    frontImg.src = card.imageUrlSmall;
+    frontImg.alt = card.translation.sourceWord.value;
     Locators.cardFrontImage.replaceChildren(frontImg);
 
     const backImg = document.createElement('img');
-    backImg.src = image.urlSmall;
-    backImg.alt = translationResult.translatedWord.value;
+    backImg.src = card.imageUrlSmall;
+    backImg.alt = card.translation.translatedWord.value;
     Locators.cardBackImage.replaceChildren(backImg);
 
-    Locators.cardFrontWord.textContent = translationResult.sourceWord.value;
-    Locators.cardBackWord.textContent = translationResult.translatedWord.value;
+    Locators.cardFrontWord.textContent = card.translation.sourceWord.value;
+    Locators.cardBackWord.textContent = card.translation.translatedWord.value;
 }
 function fillInSuggestedImages (images : ImageDTO[]) {
     const fragment = document.createDocumentFragment();
