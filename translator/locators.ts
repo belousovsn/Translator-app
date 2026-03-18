@@ -11,6 +11,11 @@ export const translatedWordDisplay = document.querySelector('.translated-word') 
 export const suggestedArea = document.querySelector('.chips') as HTMLUListElement;
 export const imagesArea = document.querySelector('.image-list') as HTMLUListElement;
 export const makeCardButton = document.querySelector('#makeCardBtn') as HTMLButtonElement;
+export const cardFrontImage = document.querySelector('#memoFrontImage') as HTMLPictureElement
+export const cardBackImage = document.querySelector('#memoBackImage') as HTMLPictureElement
+export const cardFrontWord = document.querySelector('#memoFrontText') as HTMLSpanElement
+export const cardBackWord = document.querySelector('#memoBackText') as HTMLSpanElement
+
 
 export function toggleShiftActive(): void {
   isShiftActive = !isShiftActive;

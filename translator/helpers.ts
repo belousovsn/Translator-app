@@ -65,6 +65,21 @@ export async function renderSuggestedWords(translationResult : Translation) : Pr
     fillInSuggestedWords(suggestedWords);
     return suggestedWords
 }
+
+export function renderCard (translationResult : Translation, image: ImageDTO) {
+    const frontImg = document.createElement('img');
+    frontImg.src = image.urlSmall;
+    frontImg.alt = translationResult.sourceWord.value;
+    Locators.cardFrontImage.replaceChildren(frontImg);
+
+    const backImg = document.createElement('img');
+    backImg.src = image.urlSmall;
+    backImg.alt = translationResult.translatedWord.value;
+    Locators.cardBackImage.replaceChildren(backImg);
+
+    Locators.cardFrontWord.textContent = translationResult.sourceWord.value;
+    Locators.cardBackWord.textContent = translationResult.translatedWord.value;
+}
 function fillInSuggestedImages (images : ImageDTO[]) {
     const fragment = document.createDocumentFragment();
 

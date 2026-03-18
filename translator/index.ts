@@ -4,7 +4,7 @@ import { findSuggestions, findSuggestionsByTypo} from "./services/suggestionServ
 import { getSuggestedImages } from "./services/imageService.js"
 import * as Locators from "./locators.js"
 import { ImageDTO, Translation, Word } from "./types.js";
-import { findWordByLanguage, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
+import { findWordByLanguage, renderCard, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
 import { createCard } from './services/cardService.js'
 
 
@@ -29,6 +29,7 @@ Locators.searchButton?.addEventListener('click', async () => {
     ])
     currentSuggestedWords = suggestedWords
     currentImages = images
+    renderCard(currentTranslation,currentImages[0])
 });
 
 
@@ -44,6 +45,7 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
     renderTranslation(translationResult)
     //may put renderSuggestedWords here in case needed
     currentImages = await renderImages(translationResult)
+    renderCard(currentTranslation,currentImages[0])
 })
 
 Locators.makeCardButton.addEventListener('click', async () => {
