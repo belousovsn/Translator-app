@@ -11,13 +11,15 @@
         <nav class="nav-panel">
             <div class="logo">LinguaPlay</div>
             <ul>
-                <li><a href="#" class="active">Translator</a></li>
-                <li><a href="#">Dictionary</a></li>
+                <li><a href="#" class="active" data-page="translator">Translator</a></li>
+                <li><a href="#" data-page="dictionary">Dictionary</a></li>
                 <li><a href="#">Games</a></li>
                 <li><a href="#">Profile</a></li>
             </ul>
         </nav>
         <main class="content-area">
+            <!-- ═══ Translator Page ═══ -->
+            <div class="page-view" id="translatorPage">
             <div class="layout-container">
                 <div class="main-content">
                     <section class="translation-sections">
@@ -91,6 +93,20 @@
                         </div>
                     </div>
 
+                    <div class="panel card-panel hidden" id="cardPanel">
+                        <div class="panel-header">New Card</div>
+                        <div class="panel-body">
+                            <div class="card-template">
+                                <div class="card-word source-card-word">—</div>
+                                <div class="card-word translated-card-word">—</div>
+                                <div class="card-image-placeholder"></div>
+                                <button type="button" class="primary-button" id="saveCardBtn">Save Card</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="card-sidebar">
                     <div class="memo-card-section">
                         <input type="checkbox" id="memoFlipToggle" class="memo-flip-input" aria-hidden="true">
                         <label for="memoFlipToggle" class="memo-card" aria-label="Click to flip memo card">
@@ -122,22 +138,73 @@
                             </div>
                         </label>
                     </div>
-
                     <button type="button" class="primary-button" id="makeCardBtn">Make a card</button>
+                </aside>
+            </div>
+            </div><!-- /translatorPage -->
 
-                    <div class="panel card-panel hidden" id="cardPanel">
-                        <div class="panel-header">New Card</div>
-                        <div class="panel-body">
-                            <div class="card-template">
-                                <div class="card-word source-card-word">—</div>
-                                <div class="card-word translated-card-word">—</div>
-                                <div class="card-image-placeholder"></div>
-                                <button type="button" class="primary-button" id="saveCardBtn">Save Card</button>
+            <!-- ═══ Dictionary Page ═══ -->
+            <div class="page-view hidden" id="dictionaryPage">
+                <div class="dictionary-header">
+                    <h1 class="dictionary-title">My Collection</h1>
+                    <span class="dictionary-count" id="dictCount">0 cards</span>
+                </div>
+                <div class="dictionary-grid" id="dictionaryGrid">
+                    <!-- Cards are inserted here dynamically. Each card follows the same memo-card markup. -->
+                    <!-- Example placeholder cards for layout preview: -->
+                    <div class="dict-card-wrap">
+                        <input type="checkbox" class="memo-flip-input" id="dictFlip1" aria-hidden="true">
+                        <label for="dictFlip1" class="memo-card" aria-label="Click to flip card">
+                            <div class="memo-card-inner">
+                                <div class="memo-card-face memo-card-front">
+                                    <div class="memo-card-image"></div>
+                                    <div class="memo-card-footer"><span class="memo-card-text">&mdash;</span></div>
+                                    <div class="memo-flip-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                                </div>
+                                <div class="memo-card-face memo-card-back">
+                                    <div class="memo-card-image"></div>
+                                    <div class="memo-card-footer"><span class="memo-card-text">&mdash;</span></div>
+                                    <div class="memo-flip-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                                </div>
                             </div>
-                        </div>
+                        </label>
+                    </div>
+                    <div class="dict-card-wrap">
+                        <input type="checkbox" class="memo-flip-input" id="dictFlip2" aria-hidden="true">
+                        <label for="dictFlip2" class="memo-card" aria-label="Click to flip card">
+                            <div class="memo-card-inner">
+                                <div class="memo-card-face memo-card-front">
+                                    <div class="memo-card-image"></div>
+                                    <div class="memo-card-footer"><span class="memo-card-text">&mdash;</span></div>
+                                    <div class="memo-flip-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                                </div>
+                                <div class="memo-card-face memo-card-back">
+                                    <div class="memo-card-image"></div>
+                                    <div class="memo-card-footer"><span class="memo-card-text">&mdash;</span></div>
+                                    <div class="memo-flip-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="dict-card-wrap">
+                        <input type="checkbox" class="memo-flip-input" id="dictFlip3" aria-hidden="true">
+                        <label for="dictFlip3" class="memo-card" aria-label="Click to flip card">
+                            <div class="memo-card-inner">
+                                <div class="memo-card-face memo-card-front">
+                                    <div class="memo-card-image"></div>
+                                    <div class="memo-card-footer"><span class="memo-card-text">&mdash;</span></div>
+                                    <div class="memo-flip-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                                </div>
+                                <div class="memo-card-face memo-card-back">
+                                    <div class="memo-card-image"></div>
+                                    <div class="memo-card-footer"><span class="memo-card-text">&mdash;</span></div>
+                                    <div class="memo-flip-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                                </div>
+                            </div>
+                        </label>
                     </div>
                 </div>
-            </div>
+            </div><!-- /dictionaryPage -->
 
             <div id="armenianKeyboard" class="keyboard hidden">
                         <div class="keyboard-row">
@@ -197,17 +264,37 @@
 
     <script type="module" src="./dist/index.js"></script>
     <script>
-        document.querySelectorAll('.memo-card-text').forEach(function(el) {
-            function fit() {
-                el.style.fontSize = '';
-                var size = parseFloat(getComputedStyle(el).fontSize);
-                while (el.scrollWidth > el.clientWidth && size > 8) {
-                    size -= 0.5;
-                    el.style.fontSize = size + 'px';
+        /* ── Text-fit for memo card footers ── */
+        function initTextFit(root) {
+            root.querySelectorAll('.memo-card-text').forEach(function(el) {
+                if (el._fitInit) return;
+                el._fitInit = true;
+                function fit() {
+                    el.style.fontSize = '';
+                    var size = parseFloat(getComputedStyle(el).fontSize);
+                    while (el.scrollWidth > el.clientWidth && size > 8) {
+                        size -= 0.5;
+                        el.style.fontSize = size + 'px';
+                    }
                 }
-            }
-            new MutationObserver(fit).observe(el, { childList: true, characterData: true, subtree: true });
-            window.addEventListener('resize', fit);
+                new MutationObserver(fit).observe(el, { childList: true, characterData: true, subtree: true });
+                window.addEventListener('resize', fit);
+            });
+        }
+        initTextFit(document);
+
+        /* ── Page navigation ── */
+        document.querySelectorAll('[data-page]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var target = this.getAttribute('data-page');
+                document.querySelectorAll('.page-view').forEach(function(p) { p.classList.add('hidden'); });
+                var page = document.getElementById(target + 'Page');
+                if (page) page.classList.remove('hidden');
+                document.querySelectorAll('[data-page]').forEach(function(l) { l.classList.remove('active'); });
+                this.classList.add('active');
+                initTextFit(document);
+            });
         });
     </script>
 </body>

@@ -70,14 +70,16 @@ body {
   display: flex;
   width: 100%;
   flex: 1;
+  gap: 24px;
 }
 
 .main-content {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-bottom: 190px;
+  /*padding-bottom: 190px;*/
 }
 
 .translation-sections {
@@ -310,6 +312,7 @@ body {
   cursor: pointer;
   width: 100%;
   text-align: center;
+  margin-top: 20px;
 }
 
 .keyboard {
@@ -428,6 +431,24 @@ body {
   justify-content: center;
 }
 
+/* ─── Card Sidebar (Translator page) ─── */
+
+.card-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 32px;
+  align-self: flex-start;
+}
+
+.card-sidebar .memo-card-section {
+  justify-content: flex-start;
+}
+
+.card-sidebar .memo-card {
+  max-width: 260px;
+}
+
 .memo-card {
   display: block;
   width: 100%;
@@ -531,9 +552,97 @@ body {
   color: #1a73e8;
 }
 
+/* ─── Page views ─── */
+
+.page-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.page-view.hidden {
+  display: none;
+}
+
+/* ─── Dictionary Page ─── */
+
+.dictionary-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 4px 0 8px;
+}
+
+.dictionary-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #202124;
+  margin: 0;
+}
+
+.dictionary-count {
+  font-size: 15px;
+  color: #5f6368;
+  font-weight: 500;
+}
+
+.dictionary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+.dict-card-wrap {
+  position: relative;
+}
+
+.dict-card-wrap .memo-card {
+  max-width: none;
+  width: 100%;
+}
+
+.dict-card-wrap .memo-card-inner {
+  aspect-ratio: 3 / 4;
+}
+
+.dict-card-wrap .memo-card-footer {
+  padding: 10px 12px;
+  min-height: 44px;
+}
+
+.dict-card-wrap .memo-card-text {
+  font-size: 1rem;
+}
+
+/* Hearthstone-style glow on hover */
+.dict-card-wrap .memo-card:hover .memo-card-face {
+  box-shadow:
+    0 0 12px rgba(26, 115, 232, 0.25),
+    0 8px 28px rgba(0, 0, 0, 0.14),
+    0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.dict-card-wrap .memo-card {
+  transition: transform 0.2s ease;
+}
+
+.dict-card-wrap .memo-card:hover {
+  transform: translateY(-4px);
+}
+
 @media (max-width: 1200px) {
   .translation-sections {
     grid-template-columns: 1fr;
+  }
+
+  .card-sidebar {
+    width: 220px;
+  }
+
+  .card-sidebar .memo-card {
+    max-width: 220px;
   }
 }
 
@@ -559,7 +668,20 @@ body {
   }
 
   .main-content {
-    padding-bottom: 240px;
+    /*padding-bottom: 240px;*/
+  }
+
+  .card-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .card-sidebar .memo-card {
+    max-width: 280px;
+  }
+
+  .layout-container {
+    flex-direction: column;
   }
 
   .keyboard {
