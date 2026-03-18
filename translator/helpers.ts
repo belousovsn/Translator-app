@@ -1,7 +1,7 @@
 import { Language, Translation, Word, ImageDTO, LocalSettings } from "./types.js"
 import * as Locators from './locators.js'
-import { getSuggestedImages } from "./imageService.js"
-import { findSuggestionsByTypo } from "./suggestionService.js"
+import { getSuggestedImages } from "./services/imageService.js"
+import { findSuggestionsByTypo } from "./services/suggestionService.js"
 
 
 let localSettingsCache: LocalSettings | null = null;

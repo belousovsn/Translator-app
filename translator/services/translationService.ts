@@ -1,4 +1,4 @@
-import {Word, Translation, Language, LocalSettings} from './types.js'
+import {Word, Translation, Language, LocalSettings} from '../types.js'
 import { makeNewWord } from './wordService.js';
 
 // MyMemory Translation API

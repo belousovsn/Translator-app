@@ -1,4 +1,4 @@
-import { Language, Word } from "./types.js";
+import { Language, Word } from "../types.js";
 
 export function makeNewWord(value: string, language: Language) : Word {
     value = value.trim()

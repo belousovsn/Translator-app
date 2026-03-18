@@ -1,7 +1,7 @@
 import { filterOutRealWords } from './translationService.js'
-import {Word} from './types.js'
-import * as Helpers from './helpers.js'
-import {sampleDict} from './mocks.js'
+import {Word} from '../types.js'
+import * as Helpers from '../helpers.js'
+import {sampleDict} from '../mocks.js'
 
 const similarletters = [
   ["գ","զ","ց"],

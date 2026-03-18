@@ -7,7 +7,7 @@ export type Language =
 export interface Word {
     id: string;
     value: string;
-    language: Language | null;
+    language: Language;
 }
 
 export interface Translation {
@@ -22,6 +22,24 @@ export interface ImageDTO {
     urlLarge : string
     wordValue : string
     description : string
+}
+
+export interface User {
+    id: string
+    createdAt: number
+    updatedAt: number
+    name: string
+    email: string
+}
+
+export interface Card {
+    id: string
+    createdAt: number
+    updatedAt: number
+    languagePair: Language[]
+    translation: Translation
+    image: ImageDTO
+    user?: User
 }
 
 export interface LocalSettings {

@@ -1,7 +1,7 @@
-import { makeNewWord } from "./wordService.js";
-import { determineInputLanguage, makeNewTranslationRecord, translateWord} from "./translationService.js";
-import { findSuggestions, findSuggestionsByTypo} from "./suggestionService.js"
-import { getSuggestedImages } from "./imageService.js"
+import { makeNewWord } from "./services/wordService.js";
+import { determineInputLanguage, makeNewTranslationRecord, translateWord} from "./services/translationService.js";
+import { findSuggestions, findSuggestionsByTypo} from "./services/suggestionService.js"
+import { getSuggestedImages } from "./services/imageService.js"
 import * as Locators from "./locators.js"
 import { ImageDTO } from "./types.js";
 import { findWordByLanguage, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";

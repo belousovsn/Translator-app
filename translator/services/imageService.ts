@@ -1,6 +1,6 @@
-import { ImageDTO } from "./types.js";
-import * as Mocks from "./mocks.js";
-import { loadLocalSettings } from "./helpers.js";
+import { ImageDTO } from "../types.js";
+import * as Mocks from "../mocks.js";
+import { loadLocalSettings } from "../helpers.js";
 
 
 const USE_IMAGE_MOCKS = true;
