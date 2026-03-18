@@ -10,6 +10,7 @@ export const sourceWordDisplay = document.querySelector('.source-word') as HTMLS
 export const translatedWordDisplay = document.querySelector('.translated-word') as HTMLSpanElement;
 export const suggestedArea = document.querySelector('.chips') as HTMLUListElement;
 export const imagesArea = document.querySelector('.image-list') as HTMLUListElement;
+export const makeCardButton = document.querySelector('#makeCardBtn') as HTMLButtonElement;
 
 export function toggleShiftActive(): void {
   isShiftActive = !isShiftActive;

@@ -38,10 +38,13 @@ export interface Card {
     updatedAt: number
     languagePair: Language[]
     translation: Translation
-    image: ImageDTO
+    imageUrlSmall: string
+    imageUrlLarge: string
     user?: User
 }
 
 export interface LocalSettings {
     UNSPLASH_ACCESS_KEY: string
+    SUPABASE_URL: string
+    SUPABASE_KEY: string
 }

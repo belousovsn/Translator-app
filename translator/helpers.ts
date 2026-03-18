@@ -47,7 +47,9 @@ export function renderTranslation (translationResult : Translation) {
     Locators.translatedWordDisplay.textContent = translationResult.translatedWord.value;
 }
 
-export async function renderImages(translationResult : Translation, useImagesMocks : boolean = false) {
+export async function renderImages(
+    translationResult : Translation, 
+    useImagesMocks : boolean = false) : Promise<ImageDTO[]> {
     let englishWord = findWordByLanguage('en', translationResult.sourceWord, translationResult.translatedWord)
     if (!englishWord) {
         console.log("Can't access image service, no English word is present for it")
@@ -55,11 +57,13 @@ export async function renderImages(translationResult : Translation, useImagesMoc
     }
     let suggestedImages : ImageDTO[] = await getSuggestedImages(englishWord.value,4,useImagesMocks)
     fillInSuggestedImages(suggestedImages)
+    return suggestedImages
 }
 
-export async function renderSuggestedWords(translationResult : Translation) {
+export async function renderSuggestedWords(translationResult : Translation) : Promise<string[]> {
     let suggestedWords : string [] = await findSuggestionsByTypo(translationResult.sourceWord)
     fillInSuggestedWords(suggestedWords);
+    return suggestedWords
 }
 function fillInSuggestedImages (images : ImageDTO[]) {
     const fragment = document.createDocumentFragment();
@@ -106,9 +110,17 @@ export async function loadLocalSettings() : Promise<LocalSettings> {
     if (!data.UNSPLASH_ACCESS_KEY) {
         throw new Error('UNSPLASH_ACCESS_KEY is missing in localSettings.json');
     }
+    if (!data.SUPABASE_URL) {
+        throw new Error('SUPABASE_URL is missing in localSettings.json');
+    }
+    if (!data.SUPABASE_KEY) {
+        throw new Error('SUPABASE_KEY is missing in localSettings.json');
+    }
 
     localSettingsCache = {
-        UNSPLASH_ACCESS_KEY: data.UNSPLASH_ACCESS_KEY
+        UNSPLASH_ACCESS_KEY: data.UNSPLASH_ACCESS_KEY,
+        SUPABASE_URL: data.SUPABASE_URL,
+        SUPABASE_KEY: data.SUPABASE_KEY
     };
 
     return localSettingsCache;

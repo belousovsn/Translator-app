@@ -1,3 +1,5 @@
 {
-    "UNSPLASH_ACCESS_KEY": "put_your_access_key_here"
+    "UNSPLASH_ACCESS_KEY": "put_your_access_key_here",
+    "SUPABASE_URL": "url_of_your_supabase_instance",
+    "SUPABASE_KEY": "key_of_your_supabase_instance"
 }

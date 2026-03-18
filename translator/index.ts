@@ -3,12 +3,14 @@ import { determineInputLanguage, makeNewTranslationRecord, translateWord} from "
 import { findSuggestions, findSuggestionsByTypo} from "./services/suggestionService.js"
 import { getSuggestedImages } from "./services/imageService.js"
 import * as Locators from "./locators.js"
-import { ImageDTO } from "./types.js";
+import { ImageDTO, Translation, Word } from "./types.js";
 import { findWordByLanguage, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
+import { createCard } from './services/cardService.js'
 
 
-
-
+let currentTranslation : Translation = null
+let currentImages : ImageDTO[] = []
+let currentSuggestedWords : string[] = []
 
 Locators.keyboardToggle?.addEventListener('click', () => {
     Locators.keyboard.classList.toggle('hidden');
@@ -17,12 +19,16 @@ Locators.keyboardToggle?.addEventListener('click', () => {
 Locators.searchButton?.addEventListener('click', async () => {
     const translationResult = await translateWord(Locators.input.value)
     if (!translationResult) return;
+    currentTranslation = translationResult
     renderTranslation(translationResult)
-    await Promise.all([
+    //currentSuggestedWords = await renderSuggestedWords(translationResult),
+    //currentImages = await renderImages(translationResult)    
+    const [suggestedWords, images] = await Promise.all([
         renderSuggestedWords(translationResult),
         renderImages(translationResult)
     ])
-    
+    currentSuggestedWords = suggestedWords
+    currentImages = images
 });
 
 
@@ -33,10 +39,16 @@ Locators.suggestedArea.addEventListener('click', async (event) => {
     const suggestedWord = chip.textContent?.trim();
         if (!suggestedWord) return;
     const translationResult = await translateWord(suggestedWord)
+    currentTranslation = translationResult
         if (!translationResult) return;
     renderTranslation(translationResult)
     //may put renderSuggestedWords here in case needed
-    await renderImages(translationResult)
+    currentImages = await renderImages(translationResult)
+})
+
+Locators.makeCardButton.addEventListener('click', async () => {
+    const newCard  = await createCard(currentTranslation, currentImages[0])
+    console.log(newCard)
 })
 
 Locators.shiftButton?.addEventListener('click', () => {
