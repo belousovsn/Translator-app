@@ -14,6 +14,8 @@
         "services/wordService.ts",
         "services/suggestionService.ts",
         "services/imageService.ts",
+        "services/authService.ts",
+        "view/authController.ts",
         "types.ts",
         "helpers.ts",
         "mocks.ts",

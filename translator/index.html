@@ -21,8 +21,12 @@
                 <li><a href="#" class="active" data-page="translator">Translator</a></li>
                 <li><a href="#" data-page="dictionary">Dictionary</a></li>
                 <li><a href="#">Games</a></li>
-                <li><a href="#">Profile</a></li>
+                <li><a href="#" id="profileNavLink">Profile</a></li>
             </ul>
+            <div class="nav-user-section hidden" id="navUserSection">
+                <span class="nav-user-email" id="navUserEmail"></span>
+                <button type="button" class="nav-signout-btn" id="signOutBtn">Sign Out</button>
+            </div>
         </nav>
         <main class="content-area">
             <!-- ═══ Translator Page ═══ -->
@@ -107,7 +111,9 @@
                                 <div class="card-word source-card-word">—</div>
                                 <div class="card-word translated-card-word">—</div>
                                 <div class="card-image-placeholder"></div>
-                                <button type="button" class="primary-button" id="saveCardBtn">Save Card</button>
+                                <span class="btn-tooltip-wrap" id="saveCardBtnWrap">
+                                    <button type="button" class="primary-button" id="saveCardBtn">Save Card</button>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -267,6 +273,25 @@
                         </div>
                     </div>
         </main>
+    </div>
+
+    <!-- ═══ Auth Modal ═══ -->
+    <div id="authModal" class="auth-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+        <div class="auth-modal">
+            <button type="button" class="auth-modal-close" id="authModalClose" aria-label="Close">&times;</button>
+            <h2 class="auth-modal-title" id="authModalTitle">Sign In</h2>
+            <div id="authConfirmMsg" class="auth-confirm hidden">
+                <p>A confirmation link has been sent to your email address.</p>
+                <p>Please check your inbox and click the link to activate your account.</p>
+            </div>
+            <form id="authForm" class="auth-form" novalidate>
+                <input type="email" id="authEmail" class="auth-input" placeholder="Email" autocomplete="email" required />
+                <input type="password" id="authPassword" class="auth-input" placeholder="Password" autocomplete="current-password" required />
+                <p id="authError" class="auth-error hidden"></p>
+                <button type="submit" class="primary-button" id="authSubmit">Sign In</button>
+            </form>
+            <button type="button" class="auth-toggle-btn" id="authToggle">Don't have an account? Sign Up</button>
+        </div>
     </div>
 
     <script type="module" src="./dist/index.js"></script>

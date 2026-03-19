@@ -19,6 +19,7 @@ export function createCard (
 }
 
 export async function saveCardToDB(card : Card) {
+    const { data: { user } } = await supabase.auth.getUser()
     const row = {
         id: card.id,
         source_lang: card.languagePair[0],
@@ -27,7 +28,7 @@ export async function saveCardToDB(card : Card) {
         target_word: card.translation.translatedWord.value,
         img_url_small: card.imageUrlSmall,
         img_url_large: card.imageUrlLarge,
-        user: card.user ?? null
+        user_id: user?.id ?? null
     }
     const {error} = await supabase.from("Cards").insert(row).single()
     if(error) {console.error("Error adding Card to DB", error.message)}

@@ -3,6 +3,9 @@ import * as Locators from "./locators.js"
 import { ImageDTO, Translation, Card } from "./types.js";
 import { renderCard, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
 import { createCard, saveCardToDB } from './services/cardService.js'
+import { initAuthController } from './view/authController.js'
+
+await initAuthController()
 
 
 let currentTranslation : Translation = null
