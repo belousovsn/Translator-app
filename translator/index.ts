@@ -4,9 +4,10 @@ import { ImageDTO, Translation, Card } from "./types.js";
 import { renderCard, renderImages, renderSuggestedWords, renderTranslation } from "./helpers.js";
 import { createCard, saveCardToDB } from './services/cardService.js'
 import { initAuthController } from './view/authController.js'
+import { initDictionaryController } from './view/dictionaryController.js'
 
 await initAuthController()
-
+await initDictionaryController()
 
 let currentTranslation : Translation = null
 let currentImages : ImageDTO[] = []

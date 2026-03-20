@@ -1,5 +1,6 @@
 import {Translation, ImageDTO, Word, User, Card} from '../types.js'
 import {supabase} from '../supabase-client.js'
+import { errorMonitor } from 'node:events'
 
 export function createCard (
     translation : Translation, 
@@ -48,8 +49,36 @@ function deleteCard(card: Card) {
     //delete from DB
 }
 
-function getCardsByUserId(user: User) : Card[] {
+export async function getCardsFromDB() : Promise<Card[]> {
     const userCards : Card[] = []
     //select from DB
-    return userCards
+    const {data, error} = await supabase
+        .from('Cards')
+        .select('*')
+        .order('created_at', {ascending: true})
+    if (error) {
+        console.error('Failed to fetch cards: ', error.message)
+        return []
+    }
+        console.log(data)
+    
+    return data.map(rowToCard)
 }
+
+function rowToCard(row : any) : Card {
+    return {
+        id: row.id,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+        languagePair: [row.source_lang, row.target_lang],
+        translation: {
+            id: row.id,
+            sourceWord: {id: crypto.randomUUID(), value: row.source_word, language: row.source_lang},
+            translatedWord: {id: crypto.randomUUID(), value: row.target_word, language: row.target_lang},
+        },
+        imageUrlSmall: row.img_url_small,
+        imageUrlLarge: row.img_url_large,
+        user: row.user_id
+    }
+}
+

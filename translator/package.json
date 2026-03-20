@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "npx tsc --watch"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
